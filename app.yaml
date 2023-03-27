@@ -1,4 +1,5 @@
 runtime: nodejs18
+service: iteration2
 handlers:
   # Serve all static files with url ending with a file extension
   - url: /(.*\..+)$
