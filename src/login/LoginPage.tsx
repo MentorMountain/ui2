@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { decodeToken } from "react-jwt";
 import { useSearchParams } from "react-router-dom";
 import ENV from "../env";
-import { decodeToken } from "react-jwt";
 
 export default function LoginPage() {
   const SFU_TICKET_PARAM = "ticket";
@@ -20,14 +20,13 @@ export default function LoginPage() {
     window.location.href = loginLink;
   };
 
+  console.log(process.env.NODE_ENV);
+
   useEffect(() => {
     setIsSFUTicketProvided(searchParams.has(SFU_TICKET_PARAM));
-    console.log("ticket", searchParams.has(SFU_TICKET_PARAM));
 
     if (isSFUTicketProvided) {
       const ticket = searchParams.get(SFU_TICKET_PARAM)!;
-      console.log("Processing", ticket);
-
       setProcessingLogin(true);
 
       axios
