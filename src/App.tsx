@@ -22,21 +22,14 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header"></header>
-      <p>Hi</p>
-      <p>{ENV.API_DOMAIN}</p>
-      <p>{ENV.SFU_CAS_LOGIN}</p>
-      {Object.entries({
-        blog: blogStatus,
-        questions: questionsStatus,
-        login: loginStatus,
-      }).map(([k, v], i) => {
-        return (
-          <p key={i}>
-            {k}: {v}
-          </p>
-        );
-      })}
+      <header className="App-header">
+        <p>Hi</p>
+        <p>{ENV.API_DOMAIN}</p>
+        <p>{ENV.SFU_CAS_LOGIN}</p>
+        <p>Blog: {blogStatus ? "true" : "false"}</p>
+        <p>Questions: {questionsStatus ? "true" : "false"}</p>
+        <p>Login: {loginStatus ? "true" : "false"}</p>
+      </header>
     </div>
   );
 }
