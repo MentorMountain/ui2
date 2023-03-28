@@ -12,6 +12,7 @@ export default function LoginPage() {
 
   const [isSFUTicketProvided, setIsSFUTicketProvided] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [processingLogin, setProcessingLogin] = useState(false);
 
   const [temp, setTemp] = useState("");
 
@@ -27,6 +28,8 @@ export default function LoginPage() {
       const ticket = searchParams.get(SFU_TICKET_PARAM)!;
       console.log("Processing", ticket);
 
+      setProcessingLogin(true);
+
       axios
         .post(ENV.API_DOMAIN + "/api/login", {
           sfuToken: ticket,
@@ -38,7 +41,11 @@ export default function LoginPage() {
             const token = decodeToken(response.data.token);
             const { computingID } = token as any;
             setTemp(computingID);
+            setProcessingLogin(false);
           }
+        })
+        .catch(() => {
+          setProcessingLogin(false);
         });
 
       setSearchParams({});
@@ -50,7 +57,8 @@ export default function LoginPage() {
     <>
       <h1>Login</h1>
       {temp && <p>Hi {JSON.stringify(temp)}</p>}
-      {!isSFUTicketProvided && !temp && (
+      {processingLogin && <p>Verifying SFU Login</p>}
+      {!processingLogin && !temp && (
         <>
           <Button onClick={onSFULoginClicked}>Login with SFU</Button>
         </>
