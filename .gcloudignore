@@ -33,3 +33,4 @@ README.md
 tsconfig.json
 yarn.lock
 package.json
+.env
