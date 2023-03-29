@@ -1,11 +1,14 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ENV from "../env";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
 
 export default function LoginPage() {
+  const { login, computingID } = useLoginContext();
+  const reactNavigate = useNavigate();
+
   const SFU_TICKET_PARAM = "ticket";
   const location = window.location.href.split("?")[0];
   const loginLink = `${ENV.SFU_CAS_LOGIN}/?renew=true&service=${location}`;
@@ -13,8 +16,6 @@ export default function LoginPage() {
   const [isSFUTicketProvided, setIsSFUTicketProvided] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [processingLogin, setProcessingLogin] = useState(false);
-
-  const { login, computingID } = useLoginContext();
 
   const onSFULoginClicked = () => {
     window.location.href = loginLink;
@@ -29,21 +30,24 @@ export default function LoginPage() {
       const ticket = searchParams.get(SFU_TICKET_PARAM)!;
       setProcessingLogin(true);
 
-      login(ticket, location, () => console.log("done")).then((result) => {
-        if (result) {
+      login(ticket, location, () => console.log("Done login verify")).then(
+        (result) => {
+          setProcessingLogin(false);
+          reactNavigate(HOME_PAGE);
         }
-
-        setProcessingLogin(false);
-      });
+      );
 
       setSearchParams({});
       setIsSFUTicketProvided(false);
     }
-  }, [isSFUTicketProvided, setSearchParams, searchParams, location, login]);
-
-  if (computingID) {
-    return <Navigate to={HOME_PAGE} />;
-  }
+  }, [
+    isSFUTicketProvided,
+    setSearchParams,
+    searchParams,
+    location,
+    login,
+    reactNavigate,
+  ]);
 
   return (
     <>

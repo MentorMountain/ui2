@@ -4,6 +4,7 @@ import "./App.css";
 import BlogPage from "./blog/BlogPage";
 import HomePage from "./home/HomePage";
 import LoginPage from "./login/LoginPage";
+import { RequireLogin } from "./login/RequireLogin";
 import {
   ABOUT_PAGE,
   BLOG_PAGE,
@@ -23,31 +24,31 @@ interface Page {
 function App() {
   const pages: Page[] = [
     {
-      name: "home",
+      name: "Home",
       path: HOME_PAGE,
       component: <HomePage />,
       isProtected: false,
     },
     {
-      name: "login",
+      name: "Login",
       path: LOGIN_PAGE,
       component: <LoginPage />,
       isProtected: false,
     },
     {
-      name: "about",
+      name: "About",
       path: ABOUT_PAGE,
       component: <AboutPage />,
       isProtected: true,
     },
     {
-      name: "blog",
+      name: "Blog",
       path: BLOG_PAGE,
       component: <BlogPage />,
       isProtected: true,
     },
     {
-      name: "questions",
+      name: "Questions",
       path: QUESTIONS_PAGE,
       component: <QuestionsPage />,
       isProtected: true,
@@ -58,7 +59,11 @@ function App() {
     <div className="App">
       <Routes>
         {pages.map(({ name, path, isProtected, component }) => {
-          const routeElement = isProtected ? <>{component}</> : component;
+          const routeElement = isProtected ? (
+            <RequireLogin>{component}</RequireLogin>
+          ) : (
+            component
+          );
 
           return <Route key={name} element={routeElement} path={path} />;
         })}

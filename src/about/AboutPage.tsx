@@ -18,6 +18,7 @@ export default function AboutPage() {
       setQuestionsStatus(res.status === 200);
     });
   }, []);
+
   return (
     <>
       <h1>About</h1>
