@@ -1,6 +1,5 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
-import ENV from "../../env";
 import { loginEndpoint } from "./LoginService";
 import { UserRole } from "./UserRole";
 

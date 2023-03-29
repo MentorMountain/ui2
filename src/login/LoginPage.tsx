@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ENV from "../env";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
@@ -8,6 +8,9 @@ import { useLoginContext } from "./auth/LoginContextProvider";
 export default function LoginPage() {
   const { login, computingID } = useLoginContext();
   const reactNavigate = useNavigate();
+  const reactLocation = useLocation();
+
+  const from = reactLocation.state?.from?.pathname || HOME_PAGE;
 
   const SFU_TICKET_PARAM = "ticket";
   const location = window.location.href.split("?")[0];
@@ -48,6 +51,10 @@ export default function LoginPage() {
     login,
     reactNavigate,
   ]);
+
+  if (computingID) {
+    return <Navigate to={from} replace/>;
+  }
 
   return (
     <>
