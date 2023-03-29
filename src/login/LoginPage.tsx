@@ -1,6 +1,11 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import ENV from "../env";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
@@ -51,14 +56,19 @@ export default function LoginPage() {
   ]);
 
   if (computingID) {
-    return <Navigate to={from} replace/>;
+    return <Navigate to={from} replace />;
   }
 
   return (
     <>
       <h1>Login</h1>
       {computingID && <p>Hi {computingID}</p>}
-      {processingLogin && <p>Verifying SFU Login</p>}
+      {processingLogin && (
+        <>
+          <p>Verifying SFU Login</p>
+          <CircularProgress />
+        </>
+      )}
       {!processingLogin && !computingID && (
         <>
           <Button onClick={onSFULoginClicked}>Login with SFU</Button>
