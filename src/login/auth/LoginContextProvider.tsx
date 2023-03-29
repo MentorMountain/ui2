@@ -7,6 +7,7 @@ interface LoginContextType {
   jwt: string;
   computingID: string;
   role: UserRole;
+  isInitialized: boolean;
 
   login: (
     sfuToken: string,
@@ -22,6 +23,7 @@ export const LoginContext = React.createContext<LoginContextType>(
 
 export function LoginContextProvider({ children }: { children: ReactNode }) {
   const [jwt, setJWT] = useState<string>("");
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [computingID, setComputingID] = useState<string>("");
   const [role, setRole] = useState<UserRole>("");
 
@@ -53,6 +55,8 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
       callback();
     }
 
+    setIsInitialized(true);
+
     return response.success;
   };
 
@@ -77,6 +81,7 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
           logout(() => console.warn("Expired token"));
         }
       }
+      setIsInitialized(true);
     };
 
     update();
@@ -90,6 +95,7 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     jwt,
     computingID,
     role,
+    isInitialized,
     login,
     logout,
   };
