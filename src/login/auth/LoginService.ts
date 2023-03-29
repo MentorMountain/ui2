@@ -24,3 +24,20 @@ export async function loginEndpoint(
     };
   }
 }
+
+export async function loginIntrospection(token: string): Promise<boolean> {
+  try {
+    const authHeader = {
+      Authorization: token,
+    };
+    const response = await axios.get(
+      ENV.API_DOMAIN + "/api/login/introspection",
+      { headers: authHeader }
+    );
+
+    return response.status === 200;
+  } catch (e) {
+    console.error("Token failed");
+    return false;
+  }
+}

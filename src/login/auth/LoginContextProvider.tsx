@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
-import { loginEndpoint } from "./LoginService";
+import { loginEndpoint, loginIntrospection } from "./LoginService";
 import { UserRole } from "./UserRole";
 
 interface LoginContextType {
@@ -40,13 +40,6 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  useEffect(() => {
-    const candidateToken = localStorage.getItem(tokenStorage);
-    if (candidateToken) {
-      assignFromToken(candidateToken);
-    }
-  });
-
   const login = async (
     sfuToken: string,
     referrer: string,
@@ -70,6 +63,28 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(tokenStorage);
     callback();
   };
+
+  useEffect(() => {
+    let cancelled = false;
+    const update = async () => {
+      const candidateToken = localStorage.getItem(tokenStorage);
+
+      if (!cancelled && candidateToken) {
+        if (await loginIntrospection(candidateToken)) {
+          console.log("Valid token");
+          assignFromToken(candidateToken);
+        } else {
+          logout(() => console.warn("Expired token"));
+        }
+      }
+    };
+
+    update();
+
+    return () => {
+      cancelled = true;
+    };
+  });
 
   const context: LoginContextType = {
     jwt,
