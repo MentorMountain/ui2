@@ -36,8 +36,7 @@ export async function loginIntrospection(token: string): Promise<boolean> {
     );
 
     return response.status === 200;
-  } catch (e) {
-    console.error("Token failed");
-    return false;
+  } catch (err) {
+    return (err as any)?.response?.status !== 401;
   }
 }

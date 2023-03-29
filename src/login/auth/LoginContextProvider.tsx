@@ -78,9 +78,11 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
           console.log("Valid token");
           assignFromToken(candidateToken);
         } else {
+          console.warn("Invalid token");
           logout(() => console.warn("Expired token"));
         }
       }
+
       setIsInitialized(true);
     };
 
