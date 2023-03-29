@@ -24,8 +24,6 @@ export default function LoginPage() {
     window.location.href = loginLink;
   };
 
-  console.log(process.env.NODE_ENV);
-
   useEffect(() => {
     setIsSFUTicketProvided(searchParams.has(SFU_TICKET_PARAM));
 
