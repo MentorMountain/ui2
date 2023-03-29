@@ -1,9 +1,8 @@
 import { Button } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { decodeToken } from "react-jwt";
 import { useSearchParams } from "react-router-dom";
 import ENV from "../env";
+import { useLoginContext } from "./auth/LoginContextProvider";
 
 export default function LoginPage() {
   const SFU_TICKET_PARAM = "ticket";
@@ -14,7 +13,7 @@ export default function LoginPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [processingLogin, setProcessingLogin] = useState(false);
 
-  const [temp, setTemp] = useState("");
+  const { login, logout, computingID } = useLoginContext();
 
   const onSFULoginClicked = () => {
     window.location.href = loginLink;
@@ -29,39 +28,29 @@ export default function LoginPage() {
       const ticket = searchParams.get(SFU_TICKET_PARAM)!;
       setProcessingLogin(true);
 
-      axios
-        .post(ENV.API_DOMAIN + "/api/login", {
-          sfuToken: ticket,
-          referrer: location,
-        })
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.success) {
-            const token = decodeToken(response.data.token);
-            const { computingID } = token as any;
-            setTemp(computingID);
-            setProcessingLogin(false);
-          }
-        })
-        .catch(() => {
-          setProcessingLogin(false);
-        });
+      login(ticket, location, () => console.log("done")).then((result) => {
+        if (result) {
+        }
+
+        setProcessingLogin(false);
+      });
 
       setSearchParams({});
       setIsSFUTicketProvided(false);
     }
-  }, [isSFUTicketProvided, setSearchParams, searchParams, location]);
+  }, [isSFUTicketProvided, setSearchParams, searchParams, location, login]);
 
   return (
     <>
       <h1>Login</h1>
-      {temp && <p>Hi {JSON.stringify(temp)}</p>}
+      {computingID && <p>Hi {computingID}</p>}
       {processingLogin && <p>Verifying SFU Login</p>}
-      {!processingLogin && !temp && (
+      {!processingLogin && !computingID && (
         <>
           <Button onClick={onSFULoginClicked}>Login with SFU</Button>
         </>
       )}
+      {computingID && <Button onClick={() => logout(() => 0)}>Logout</Button>}
     </>
   );
 }
