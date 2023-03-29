@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
 import { ABOUT_PAGE, BLOG_PAGE, LOGIN_PAGE, QUESTIONS_PAGE } from "../paths";

@@ -1,5 +1,5 @@
-import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import {
   Navigate,
   useLocation,
@@ -66,7 +66,6 @@ export default function LoginPage() {
       {processingLogin && (
         <>
           <p>Verifying SFU Login</p>
-          <CircularProgress />
         </>
       )}
       {!processingLogin && !computingID && (
