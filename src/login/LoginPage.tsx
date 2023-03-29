@@ -1,7 +1,8 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import ENV from "../env";
+import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
 
 export default function LoginPage() {
@@ -13,7 +14,7 @@ export default function LoginPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [processingLogin, setProcessingLogin] = useState(false);
 
-  const { login, logout, computingID } = useLoginContext();
+  const { login, computingID } = useLoginContext();
 
   const onSFULoginClicked = () => {
     window.location.href = loginLink;
@@ -40,6 +41,10 @@ export default function LoginPage() {
     }
   }, [isSFUTicketProvided, setSearchParams, searchParams, location, login]);
 
+  if (computingID) {
+    return <Navigate to={HOME_PAGE} />;
+  }
+
   return (
     <>
       <h1>Login</h1>
@@ -50,7 +55,6 @@ export default function LoginPage() {
           <Button onClick={onSFULoginClicked}>Login with SFU</Button>
         </>
       )}
-      {computingID && <Button onClick={() => logout(() => 0)}>Logout</Button>}
     </>
   );
 }
