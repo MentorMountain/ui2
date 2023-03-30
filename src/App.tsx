@@ -2,7 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import AboutPage from "./about/AboutPage";
 import "./App.css";
 import BlogPage from "./blog/BlogPage";
+import FullPageSpinner from "./common/FullPageSpinner";
 import HomePage from "./home/HomePage";
+import { useLoginContext } from "./login/auth/LoginContextProvider";
 import LoginPage from "./login/LoginPage";
 import { RequireLogin } from "./login/RequireLogin";
 import {
@@ -54,6 +56,16 @@ function App() {
       isProtected: true,
     },
   ];
+
+  const { isInitialized } = useLoginContext();
+
+  if (!isInitialized) {
+    return (
+      <div className="App">
+        <FullPageSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="App">

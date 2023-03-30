@@ -19,7 +19,9 @@ export default function LoginPage() {
 
   const SFU_TICKET_PARAM = "ticket";
   const location = window.location.href.split("?")[0];
-  const loginLink = `${ENV.SFU_CAS_LOGIN}/?renew=true&service=${location}`;
+  const loginLink = `${
+    ENV.SFU_CAS_LOGIN
+  }/?renew=true&service=${encodeURIComponent(location)}`;
 
   const [isSFUTicketProvided, setIsSFUTicketProvided] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,12 +38,16 @@ export default function LoginPage() {
       const ticket = searchParams.get(SFU_TICKET_PARAM)!;
       setProcessingLogin(true);
 
-      login(ticket, location, () => console.log("Done login verify")).then(
-        (result) => {
+      login(ticket, location, () => console.log("Done login verify"))
+        .then((result) => {
+          if (true) {
+            reactNavigate(HOME_PAGE);
+          }
           setProcessingLogin(false);
-          reactNavigate(HOME_PAGE);
-        }
-      );
+        })
+        .catch((e) => {
+          console.error(e);
+        });
 
       setSearchParams({});
       setIsSFUTicketProvided(false);

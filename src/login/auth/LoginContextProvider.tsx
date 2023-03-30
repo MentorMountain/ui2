@@ -55,8 +55,6 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
       callback();
     }
 
-    setIsInitialized(true);
-
     return response.success;
   };
 
@@ -82,7 +80,6 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
           logout(() => console.warn("Expired token"));
         }
       }
-
       setIsInitialized(true);
     };
 
