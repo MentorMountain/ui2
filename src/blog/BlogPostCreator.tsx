@@ -15,13 +15,14 @@ interface BlogPostCreatorProps {
 const DEFAULT_TEXT = "";
 
 export default function BlogPostCreator({
-  show,
+  show, // TODO-JAROD: on-show to set isTitleValid and isContentValid to true
   onHide,
   onSubmit,
 }: BlogPostCreatorProps) {
   const [title, setTitle] = useState<string>(DEFAULT_TEXT);
   const [content, setContent] = useState<string>(DEFAULT_TEXT);
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
+  const [isContentValid, setIsContentValid] = useState<boolean>(true);
 
   const hideModal = () => {
     setTitle(DEFAULT_TEXT);
@@ -29,25 +30,32 @@ export default function BlogPostCreator({
     onHide();
   };
 
-  const isContentValid = (title: string, content: string) => {
-    // TODO-JAROD: Enforce maxes, potentially check script in future, notify user in UI accordingly in future
-    const minLengthValid = title.trim().length > 0 && content.trim().length > 0;
+  const checkTitleValidity = (title: string): boolean => {
+    title = title.trim();
+    const isTitleValid = 0 < title.length && title.length <= 150;
 
-    return minLengthValid;
+    return isTitleValid;
+  };
+
+  const checkContentValidity = (content: string): boolean => {
+    content = content.trim();
+    const isContentValid = 0 < content.length && content.length <= 700;
+
+    return isContentValid;
   };
 
   const updateTitle = (text: string) => {
     setTitle(text);
-    setIsValid(isContentValid(text, content));
+    setIsTitleValid(checkTitleValidity(text));
   };
 
   const updateContent = (text: string) => {
     setContent(text);
-    setIsValid(isContentValid(title, text));
+    setIsContentValid(checkContentValidity(text));
   };
 
   const submitPost = () => {
-    if (isContentValid(title, content)) {
+    if (checkTitleValidity(title) && checkContentValidity(content)) {
       onSubmit({ title, content });
     }
   };
@@ -63,6 +71,8 @@ export default function BlogPostCreator({
             <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
+              size="lg"
+              isInvalid={!isTitleValid}
               onChange={(e) => updateTitle(e.target.value)}
             />
           </Form.Group>
@@ -71,6 +81,7 @@ export default function BlogPostCreator({
             <Form.Control
               as="textarea"
               rows={5}
+              isInvalid={!isContentValid}
               onChange={(e) => updateContent(e.target.value)}
             />
           </Form.Group>
@@ -80,7 +91,10 @@ export default function BlogPostCreator({
         <Button variant="secondary" onClick={hideModal}>
           Close
         </Button>
-        <Button disabled={!isValid} variant="primary" onClick={submitPost}>
+        <Button
+          variant="primary"
+          disabled={!checkTitleValidity(title) || !checkContentValidity(content)}
+          onClick={submitPost}>
           Submit
         </Button>
       </Modal.Footer>
