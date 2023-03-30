@@ -1,6 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { blogHealthEndpoint } from "../blog/service/BlogService";
 import ENV from "../env";
+import { loginHealthEndpoint } from "../login/auth/LoginService";
+import { questionsHealthEndpoint } from "../questions/service/QuestionsService";
 
 export default function AboutPage() {
   const [blogStatus, setBlogStatus] = useState(false);
@@ -8,15 +10,9 @@ export default function AboutPage() {
   const [questionsStatus, setQuestionsStatus] = useState(false);
 
   useEffect(() => {
-    axios.get(ENV.API_DOMAIN + "/api/blog/health").then((res) => {
-      setBlogStatus(res.status === 200);
-    });
-    axios.get(ENV.API_DOMAIN + "/api/login/health").then((res) => {
-      setLoginStatus(res.status === 200);
-    });
-    axios.get(ENV.API_DOMAIN + "/api/questions/health").then((res) => {
-      setQuestionsStatus(res.status === 200);
-    });
+    blogHealthEndpoint().then((status) => setBlogStatus(status));
+    questionsHealthEndpoint().then((status) => setQuestionsStatus(status));
+    loginHealthEndpoint().then((status) => setLoginStatus(status));
   }, []);
 
   return (

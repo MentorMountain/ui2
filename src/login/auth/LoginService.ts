@@ -40,3 +40,13 @@ export async function loginIntrospection(token: string): Promise<boolean> {
     return (err as any)?.response?.status !== 401;
   }
 }
+
+export async function loginHealthEndpoint(): Promise<boolean> {
+  try {
+    return (
+      (await axios.get(ENV.API_DOMAIN + "/api/login/health")).status === 200
+    );
+  } catch {
+    return false;
+  }
+}

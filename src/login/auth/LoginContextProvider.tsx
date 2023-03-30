@@ -1,6 +1,12 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
-import { loginEndpoint, loginIntrospection } from "./LoginService";
+import { blogHealthEndpoint } from "../../blog/service/BlogService";
+import { questionsHealthEndpoint } from "../../questions/service/QuestionsService";
+import {
+  loginEndpoint,
+  loginHealthEndpoint,
+  loginIntrospection,
+} from "./LoginService";
 import { UserRole } from "./UserRole";
 
 interface LoginContextType {
@@ -67,6 +73,10 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    blogHealthEndpoint();
+    questionsHealthEndpoint();
+    loginHealthEndpoint();
+
     let cancelled = false;
     const update = async () => {
       const candidateToken = localStorage.getItem(tokenStorage);
