@@ -30,6 +30,7 @@ export default function BlogPostCreator({
   };
 
   const isContentValid = (title: string, content: string) => {
+    // TODO-JAROD: Enforce maxes, potentially check script in future, notify user in UI accordingly in future
     const minLengthValid = title.trim().length > 0 && content.trim().length > 0;
 
     return minLengthValid;

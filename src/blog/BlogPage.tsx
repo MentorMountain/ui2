@@ -8,6 +8,8 @@ export default function BlogPage() {
   const hideModal = () => setShowPostCreator(false);
 
   const submitBlogPost = ({ title, content }: BlogPostInformationProps) => {
+    // TODO-JAROD: create an HTML call with onSuccess and onError and execute it 
+    console.info(`BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`);
     hideModal();
   };
 
