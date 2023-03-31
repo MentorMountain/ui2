@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { BlogPost } from "./BlogPost";
+import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 
 export default function BlogPage() {
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
+    [
+      {"title": "post-1", "content": "lelelelelelee"},
+      {"title": "post-2", "content": "lelelelelelee"},
+      {"title": "post-3", "content": "lelelelelelee"},
+      {"title": "post-4", "content": "lelelelelelee"},
+    ]
+  );
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
 
@@ -25,9 +33,9 @@ export default function BlogPage() {
         onSubmit={submitBlogPost}
         onHide={hideModal}
       />
-      {/* <BlogList
-        list={blogPosts}
-      /> */}
+      <BlogList
+        blogList={blogPosts}
+      />
     </>
   );
 }

@@ -1,4 +1,18 @@
-// function BlogList(props) {
+import { BlogPost } from "./BlogPost";
 
-// }
-export {}
+interface BlogListProps {
+  blogList: BlogPost[];
+}
+
+export default function BlogList({
+  blogList,
+}: BlogListProps) {
+  return (
+    <div>
+      <p>lelelelelelelele</p>
+      { blogList.map((blogPost) => (
+        <p>Title: {blogPost.title} | Content: {blogPost.content}</p>
+      )) }
+    </div>
+  );
+}
