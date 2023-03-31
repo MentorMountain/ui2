@@ -2,9 +2,8 @@
 Create a .env file in the project root.
 ```
 REACT_APP_API_DOMAIN="<API_GATEWAY_URL>"
-REACT_APP_SFU_CAS_LOGIN="https://cas.sfu.ca/cas/login"
+REACT_APP_HCAPTCHA_SITE_KEY="<RECAPTCHA_SITE_KEY>"
 ```
 
 ## Deploy
-1. Build: `yarn build`
-2. Deploy: `gcloud app deploy app.yaml`
+1. Build: `yarn deploy`

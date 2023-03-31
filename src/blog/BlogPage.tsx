@@ -25,7 +25,6 @@ export default function BlogPage() {
 
   return (
     <>
-      <h1>Blog</h1>
       <Button onClick={showModal}>Create Blog Post</Button>
       <BlogPostCreator
         show={showPostCreator}

@@ -1,84 +1,173 @@
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { useRef, useState } from "react";
 import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import ENV from "../env";
+  Button,
+  ButtonGroup,
+  Card,
+  Form,
+  Spinner,
+  Toast,
+} from "react-bootstrap";
+import { Navigate, useLocation } from "react-router-dom";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ENV from "../env";
 
 export default function LoginPage() {
-  const { login, computingID } = useLoginContext();
-  const reactNavigate = useNavigate();
+  const { login, signup, username } = useLoginContext();
   const reactLocation = useLocation();
 
   const from = reactLocation.state?.from?.pathname || HOME_PAGE;
-
-  const SFU_TICKET_PARAM = "ticket";
-  const location = window.location.href.split("?")[0];
-  const loginLink = `${
-    ENV.SFU_CAS_LOGIN
-  }/?renew=true&service=${encodeURIComponent(location)}`;
-
-  const [isSFUTicketProvided, setIsSFUTicketProvided] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [processingLogin, setProcessingLogin] = useState(false);
+  const [formUsername, setFormUsername] = useState<string>("");
+  const [formPassword, setFormPassword] = useState<string>("");
+  const [isValid, setIsValid] = useState<boolean>(false);
 
-  const onSFULoginClicked = () => {
-    window.location.href = loginLink;
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [systemMessage, setSystemMessage] = useState<string>("");
+
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [captchaResponse, setCaptchaResponse] = useState<string>("");
+
+  const captchaRef = useRef<HCaptcha>(null);
+
+  const resetCaptcha = () => {
+    captchaRef.current?.resetCaptcha();
+    setCaptchaResponse("");
+  };
+  const onCaptchaVerify = (token: string, etag: string) => {
+    setCaptchaResponse(token);
+
+    if (!token) {
+      resetCaptcha();
+    }
   };
 
-  useEffect(() => {
-    setIsSFUTicketProvided(searchParams.has(SFU_TICKET_PARAM));
+  const onUsernameChanged = (text: string) => {
+    setFormUsername(text);
+    setIsValid(text.length > 0 && formPassword.length > 0);
+  };
 
-    if (isSFUTicketProvided) {
-      const ticket = searchParams.get(SFU_TICKET_PARAM)!;
-      setProcessingLogin(true);
+  const onPasswordChanged = (text: string) => {
+    setFormPassword(text);
+    setIsValid(formUsername.length > 0 && text.length > 0);
+  };
 
-      login(ticket, location, () => console.log("Done login verify"))
-        .then((result) => {
-          if (true) {
-            reactNavigate(HOME_PAGE);
-          }
-          setProcessingLogin(false);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-
-      setSearchParams({});
-      setIsSFUTicketProvided(false);
+  const onSubmit = async () => {
+    if (!showCaptcha) {
+      setShowCaptcha(true);
+      return;
     }
-  }, [
-    isSFUTicketProvided,
-    setSearchParams,
-    searchParams,
-    location,
-    login,
-    reactNavigate,
-  ]);
 
-  if (computingID) {
+    setProcessingLogin(true);
+
+    if (isLogin) {
+      const loginSuccess = await login(
+        formUsername,
+        formPassword,
+        captchaResponse,
+        () => {}
+      );
+      setSystemMessage("Failed to login");
+      console.log(loginSuccess);
+    } else {
+      const signupSuccess = await signup(
+        formUsername,
+        formPassword,
+        captchaResponse
+      );
+      if (!signupSuccess) {
+        setSystemMessage("Failed to create user");
+      }
+      console.log(signupSuccess);
+    }
+
+    resetCaptcha();
+    setProcessingLogin(false);
+  };
+
+  if (username) {
     return <Navigate to={from} replace />;
   }
 
   return (
     <>
-      <h1>Login</h1>
-      {computingID && <p>Hi {computingID}</p>}
-      {processingLogin && (
-        <>
-          <p>Verifying SFU Login</p>
-        </>
-      )}
-      {!processingLogin && !computingID && (
-        <>
-          <Button onClick={onSFULoginClicked}>Login with SFU</Button>
-        </>
-      )}
+      <div className="d-flex mt-4 flex-column">
+        <div className="mt-3 d-flex justify-content-around">
+          <Card style={{ width: "21em" }}>
+            <Card.Body>
+              <Form onSubmit={(e) => e.preventDefault()}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    disabled={processingLogin}
+                    onChange={(e) => onUsernameChanged(e.target.value)}
+                    value={formUsername}
+                    type="text"
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    disabled={processingLogin}
+                    onChange={(e) => onPasswordChanged(e.target.value)}
+                    value={formPassword}
+                    type="password"
+                  />
+                </Form.Group>
+              </Form>
+            </Card.Body>
+            <Card.Footer>
+              <ButtonGroup className="d-flex justify-content-around">
+                <Button
+                  onClick={onSubmit}
+                  disabled={
+                    !isValid ||
+                    processingLogin ||
+                    (showCaptcha && captchaResponse === "")
+                  }
+                >
+                  {processingLogin && (
+                    <span>
+                      <Spinner size="sm" />
+                      {"   "}
+                    </span>
+                  )}
+                  {isLogin ? "Login" : "Create an account"}
+                </Button>
+              </ButtonGroup>
+              {showCaptcha && (
+                <div className="mt-2">
+                  <HCaptcha
+                    sitekey={ENV.HCAPTCHA_SITE_KEY!}
+                    onVerify={onCaptchaVerify}
+                    ref={captchaRef}
+                  />
+                </div>
+              )}
+            </Card.Footer>
+          </Card>
+        </div>
+        <Button
+          onClick={() => setIsLogin(!isLogin)}
+          className="mt-2"
+          variant="link"
+          disabled={processingLogin}
+        >
+          {isLogin ? "Create an account" : "I already have an account"}
+        </Button>
+        <div className="mt-4 d-flex justify-content-around">
+          <Toast
+            show={systemMessage.length > 0}
+            onClose={() => setSystemMessage("")}
+            delay={4000}
+            autohide
+          >
+            <Toast.Header>Login</Toast.Header>
+            <Toast.Body>{systemMessage}</Toast.Body>
+          </Toast>
+        </div>
+      </div>
     </>
   );
 }

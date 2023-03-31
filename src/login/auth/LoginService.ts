@@ -7,14 +7,61 @@ export interface LoginResponse {
 }
 
 export async function loginEndpoint(
-  sfuToken: string,
-  referrer: string
+  username: string,
+  password: string,
+  captchaResponse: string
 ): Promise<LoginResponse> {
   try {
     const response = await axios.post(ENV.API_DOMAIN + "/api/login", {
-      sfuToken,
-      referrer,
+      username,
+      password,
+      captchaResponse,
     });
+    return response.data as LoginResponse;
+  } catch (e) {
+    console.error(e);
+    return {
+      success: false,
+      error: JSON.stringify(e),
+    };
+  }
+}
+
+export async function signupEndpoint(
+  username: string,
+  password: string,
+  captchaResponse: string
+): Promise<LoginResponse> {
+  try {
+    const response = await axios.post(ENV.API_DOMAIN + "/api/login/signup", {
+      username,
+      password,
+      captchaResponse,
+    });
+    return response.data as LoginResponse;
+  } catch (e) {
+    console.error(e);
+    return {
+      success: false,
+      error: JSON.stringify(e),
+    };
+  }
+}
+
+export async function becomeMentorEndpoint(
+  token: string,
+  mentorPassword: string
+): Promise<LoginResponse> {
+  try {
+    const response = await axios.post(
+      ENV.API_DOMAIN + "/api/login/apply-mentor",
+      { applicationCode: mentorPassword },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
     return response.data as LoginResponse;
   } catch (e) {
     console.error(e);

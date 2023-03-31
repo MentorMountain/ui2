@@ -3,23 +3,32 @@ import { decodeToken } from "react-jwt";
 import { blogHealthEndpoint } from "../../blog/service/BlogService";
 import { questionsHealthEndpoint } from "../../questions/service/QuestionsService";
 import {
+  LoginResponse,
   loginEndpoint,
   loginHealthEndpoint,
   loginIntrospection,
+  signupEndpoint,
 } from "./LoginService";
 import { UserRole } from "./UserRole";
 
 interface LoginContextType {
   jwt: string;
-  computingID: string;
+  username: string;
   role: UserRole;
   isInitialized: boolean;
 
   login: (
-    sfuToken: string,
-    referrer: string,
+    username: string,
+    password: string,
+    captchaResponse: string,
     callback: VoidFunction
   ) => Promise<boolean>;
+  signup: (
+    username: string,
+    password: string,
+    captchaResponse: string
+  ) => Promise<boolean>;
+  refreshLogin: (token: string, callback: VoidFunction) => Promise<boolean>;
   logout: (callback: VoidFunction) => void;
 }
 
@@ -30,45 +39,79 @@ export const LoginContext = React.createContext<LoginContextType>(
 export function LoginContextProvider({ children }: { children: ReactNode }) {
   const [jwt, setJWT] = useState<string>("");
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
-  const [computingID, setComputingID] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [role, setRole] = useState<UserRole>("");
 
   const tokenStorage = "mm-token";
 
-  const assignFromToken = (sfuToken: string) => {
-    const payload = decodeToken(sfuToken) as {
-      computingID: string;
+  const assignFromToken = (token: string) => {
+    const payload = decodeToken(token) as {
+      username: string;
       role: UserRole;
     };
 
     if (payload) {
-      setJWT(sfuToken);
-      setComputingID(payload.computingID);
+      setJWT(token);
+      setUsername(payload.username);
       setRole(payload.role);
     }
   };
 
-  const login = async (
-    sfuToken: string,
-    referrer: string,
-    callback: VoidFunction
-  ) => {
-    const response = await loginEndpoint(sfuToken, referrer);
+  const clearData = () => {
+    setJWT("");
+    setUsername("");
+    setRole("");
+    localStorage.removeItem(tokenStorage);
+  };
 
+  const refreshLogin = async (token: string, callback: VoidFunction) => {
+    const success = await loginIntrospection(token);
+    console.log("token introspection success", token);
+
+    if (success) {
+      assignFromToken(token);
+    } else {
+      clearData();
+    }
+
+    callback();
+    return success;
+  };
+
+  const handleLoginAction = (response: LoginResponse) => {
     if (response.success) {
       assignFromToken(response.token!);
       localStorage.setItem(tokenStorage, response.token!);
-      callback();
+    } else {
+      clearData();
+      console.error("Failed to login");
     }
+  };
 
+  const login = async (
+    username: string,
+    password: string,
+    captchaResponse: string,
+    callback: VoidFunction
+  ) => {
+    const response = await loginEndpoint(username, password, captchaResponse);
+    handleLoginAction(response);
+    callback();
+    return response.success;
+  };
+
+  const signup = async (
+    username: string,
+    password: string,
+    captchaResponse: string
+  ) => {
+    const response = await signupEndpoint(username, password, captchaResponse);
+    handleLoginAction(response);
     return response.success;
   };
 
   const logout = (callback: VoidFunction) => {
-    setJWT("");
-    setComputingID("");
-    setRole("");
-    localStorage.removeItem(tokenStorage);
+    clearData();
     callback();
   };
 
@@ -102,10 +145,12 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
 
   const context: LoginContextType = {
     jwt,
-    computingID,
+    username,
     role,
     isInitialized,
     login,
+    signup,
+    refreshLogin,
     logout,
   };
 

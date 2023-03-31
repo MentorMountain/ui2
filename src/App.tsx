@@ -9,12 +9,15 @@ import LoginPage from "./login/LoginPage";
 import { RequireLogin } from "./login/RequireLogin";
 import {
   ABOUT_PAGE,
+  ACCOUNT_PAGE,
   BLOG_PAGE,
   HOME_PAGE,
   LOGIN_PAGE,
   QUESTIONS_PAGE,
 } from "./paths";
 import QuestionsPage from "./questions/QuestionsPage";
+import AccountPage from "./login/AccountPage";
+import { Container } from "react-bootstrap";
 
 interface Page {
   name: string;
@@ -38,6 +41,12 @@ function App() {
       isProtected: false,
     },
     {
+      name: "Account",
+      path: ACCOUNT_PAGE,
+      component: <AccountPage />,
+      isProtected: true,
+    },
+    {
       name: "About",
       path: ABOUT_PAGE,
       component: <AboutPage />,
@@ -59,27 +68,25 @@ function App() {
 
   const { isInitialized } = useLoginContext();
 
-  if (!isInitialized) {
-    return (
-      <div className="App">
-        <FullPageSpinner />
-      </div>
-    );
-  }
-
   return (
-    <div className="App">
-      <Routes>
-        {pages.map(({ name, path, isProtected, component }) => {
-          const routeElement = isProtected ? (
-            <RequireLogin>{component}</RequireLogin>
-          ) : (
-            component
-          );
+    <div className="App mt-3">
+      <Container>
+        {isInitialized ? (
+          <Routes>
+            {pages.map(({ name, path, isProtected, component }) => {
+              const routeElement = isProtected ? (
+                <RequireLogin>{component}</RequireLogin>
+              ) : (
+                component
+              );
 
-          return <Route key={name} element={routeElement} path={path} />;
-        })}
-      </Routes>
+              return <Route key={name} element={routeElement} path={path} />;
+            })}
+          </Routes>
+        ) : (
+          <FullPageSpinner />
+        )}
+      </Container>
     </div>
   );
 }
