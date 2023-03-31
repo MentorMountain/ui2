@@ -67,6 +67,7 @@ export default function LoginPage() {
                 <Form.Group className="mb-3">
                   <Form.Label>Username</Form.Label>
                   <Form.Control
+                    disabled={processingLogin}
                     onChange={(e) => onUsernameChanged(e.target.value)}
                     value={formUsername}
                     type="text"
@@ -75,6 +76,7 @@ export default function LoginPage() {
                 <Form.Group>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
+                    disabled={processingLogin}
                     onChange={(e) => onPasswordChanged(e.target.value)}
                     value={formPassword}
                     type="password"
@@ -104,6 +106,7 @@ export default function LoginPage() {
           onClick={() => setIsLogin(!isLogin)}
           className="mt-2"
           variant="link"
+          disabled={processingLogin}
         >
           {isLogin ? "Create an account" : "I already have an account"}
         </Button>
