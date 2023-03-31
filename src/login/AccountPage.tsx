@@ -44,7 +44,7 @@ export default function AccountPage() {
               <Form onSubmit={(e) => e.preventDefault()}>
                 <Form.Group className="mb-3" controlId="mentorUpgrade.password">
                   <Form.Control
-                    placeholder="Password"
+                    placeholder="Mentor Password"
                     type="password"
                     value={mentorPassword}
                     onChange={(e) => setMentorPassword(e.target.value)}

@@ -35,7 +35,6 @@ export default function LoginPage() {
     setCaptchaResponse("");
   };
   const onCaptchaVerify = (token: string, etag: string) => {
-    console.log("Received captcha token", token);
     setCaptchaResponse(token);
 
     if (!token) {
