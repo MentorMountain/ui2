@@ -113,6 +113,13 @@ export default function LoginPage() {
               </Form>
             </Card.Body>
             <Card.Footer>
+              <div className="mt-3">
+                <HCaptcha
+                  sitekey={ENV.HCAPTCHA_SITE_KEY!}
+                  onVerify={onCaptchaVerify}
+                  ref={captchaRef}
+                />
+              </div>
               <ButtonGroup className="d-flex justify-content-around">
                 <Button
                   onClick={onSubmit}
@@ -129,13 +136,6 @@ export default function LoginPage() {
                   {isLogin ? "Login" : "Create an account"}
                 </Button>
               </ButtonGroup>
-              <div className="mt-3">
-                <HCaptcha
-                  sitekey={ENV.HCAPTCHA_SITE_KEY!}
-                  onVerify={onCaptchaVerify}
-                  ref={captchaRef}
-                />
-              </div>
             </Card.Footer>
           </Card>
         </div>
