@@ -3,6 +3,7 @@ import { decodeToken } from "react-jwt";
 import { blogHealthEndpoint } from "../../blog/service/BlogService";
 import { questionsHealthEndpoint } from "../../questions/service/QuestionsService";
 import {
+  LoginResponse,
   loginEndpoint,
   loginHealthEndpoint,
   loginIntrospection,
@@ -77,14 +78,7 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     return success;
   };
 
-  const login = async (
-    username: string,
-    password: string,
-    captchaResponse: string,
-    callback: VoidFunction
-  ) => {
-    const response = await loginEndpoint(username, password, captchaResponse);
-
+  const handleLoginAction = (response: LoginResponse) => {
     if (response.success) {
       assignFromToken(response.token!);
       localStorage.setItem(tokenStorage, response.token!);
@@ -92,7 +86,16 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
       clearData();
       console.error("Failed to login");
     }
+  };
 
+  const login = async (
+    username: string,
+    password: string,
+    captchaResponse: string,
+    callback: VoidFunction
+  ) => {
+    const response = await loginEndpoint(username, password, captchaResponse);
+    handleLoginAction(response);
     callback();
     return response.success;
   };
@@ -102,22 +105,9 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     password: string,
     captchaResponse: string
   ) => {
-    const signupSuccess = await signupEndpoint(
-      username,
-      password,
-      captchaResponse
-    );
-
-    if (signupSuccess) {
-      console.log("Signup success");
-      return await login(username, password, captchaResponse, () => // TODO FIX captcha response
-        console.log("Logging in after successful signup")
-      );
-    }
-
-    console.log("Failed to signup user");
-
-    return false;
+    const response = await signupEndpoint(username, password, captchaResponse);
+    handleLoginAction(response);
+    return response.success;
   };
 
   const logout = (callback: VoidFunction) => {

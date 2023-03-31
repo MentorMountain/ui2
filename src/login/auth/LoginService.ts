@@ -15,7 +15,7 @@ export async function loginEndpoint(
     const response = await axios.post(ENV.API_DOMAIN + "/api/login", {
       username,
       password,
-      captchaResponse
+      captchaResponse,
     });
     return response.data as LoginResponse;
   } catch (e) {
@@ -31,17 +31,20 @@ export async function signupEndpoint(
   username: string,
   password: string,
   captchaResponse: string
-): Promise<boolean> {
+): Promise<LoginResponse> {
   try {
     const response = await axios.post(ENV.API_DOMAIN + "/api/login/signup", {
       username,
       password,
-      captchaResponse
+      captchaResponse,
     });
-    return response.status === 200;
+    return response.data as LoginResponse;
   } catch (e) {
     console.error(e);
-    return false;
+    return {
+      success: false,
+      error: JSON.stringify(e),
+    };
   }
 }
 
