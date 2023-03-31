@@ -8,6 +8,7 @@ export interface BlogPostInformationProps {
 
 interface BlogPostCreatorProps {
   show: boolean;
+  onShow: VoidFunction;
   onHide: VoidFunction;
   onSubmit: (props: BlogPostInformationProps) => void;
 }
@@ -16,6 +17,7 @@ const DEFAULT_TEXT = "";
 
 export default function BlogPostCreator({
   show, // TODO-JAROD: on-show to set isTitleValid and isContentValid to true
+  onShow,
   onHide,
   onSubmit,
 }: BlogPostCreatorProps) {
@@ -23,6 +25,14 @@ export default function BlogPostCreator({
   const [content, setContent] = useState<string>(DEFAULT_TEXT);
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
+
+  const showModal = () => {
+    // Clear pre-existing warnings since user hasn't started typing yet
+    setIsTitleValid(true);
+    setIsContentValid(true);
+
+    onShow();
+  };
 
   const hideModal = () => {
     setTitle(DEFAULT_TEXT);
@@ -61,7 +71,7 @@ export default function BlogPostCreator({
   };
 
   return (
-    <Modal show={show} onHide={hideModal}>
+    <Modal show={show} onShow={showModal} onHide={hideModal}>
       <Modal.Header closeButton>
         <Modal.Title>Create Blog Post</Modal.Title>
       </Modal.Header>

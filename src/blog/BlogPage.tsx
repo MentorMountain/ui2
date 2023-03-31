@@ -19,6 +19,7 @@ export default function BlogPage() {
       <Button onClick={showModal}>Create Blog Post</Button>
       <BlogPostCreator
         show={showPostCreator}
+        onShow={showModal}
         onSubmit={submitBlogPost}
         onHide={hideModal}
       />
