@@ -19,9 +19,14 @@ interface LoginContextType {
   login: (
     username: string,
     password: string,
+    captchaResponse: string,
     callback: VoidFunction
   ) => Promise<boolean>;
-  signup: (username: string, password: string) => Promise<boolean>;
+  signup: (
+    username: string,
+    password: string,
+    captchaResponse: string
+  ) => Promise<boolean>;
   refreshLogin: (token: string, callback: VoidFunction) => Promise<boolean>;
   logout: (callback: VoidFunction) => void;
 }
@@ -75,9 +80,10 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
   const login = async (
     username: string,
     password: string,
+    captchaResponse: string,
     callback: VoidFunction
   ) => {
-    const response = await loginEndpoint(username, password);
+    const response = await loginEndpoint(username, password, captchaResponse);
 
     if (response.success) {
       assignFromToken(response.token!);
@@ -91,12 +97,20 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
     return response.success;
   };
 
-  const signup = async (username: string, password: string) => {
-    const signupSuccess = await signupEndpoint(username, password);
+  const signup = async (
+    username: string,
+    password: string,
+    captchaResponse: string
+  ) => {
+    const signupSuccess = await signupEndpoint(
+      username,
+      password,
+      captchaResponse
+    );
 
     if (signupSuccess) {
       console.log("Signup success");
-      return await login(username, password, () =>
+      return await login(username, password, captchaResponse, () => // TODO FIX captcha response
         console.log("Logging in after successful signup")
       );
     }

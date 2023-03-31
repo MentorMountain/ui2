@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Alert,
   Button,
   ButtonGroup,
   Card,
@@ -11,6 +10,8 @@ import {
 import { Navigate, useLocation } from "react-router-dom";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ENV from "../env";
 
 export default function LoginPage() {
   const { login, signup, username } = useLoginContext();
@@ -24,6 +25,8 @@ export default function LoginPage() {
 
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [systemMessage, setSystemMessage] = useState<string>("");
+
+  const [captchaResponse, setCaptchaResponse] = useState<string>("");
 
   const onUsernameChanged = (text: string) => {
     setFormUsername(text);
@@ -39,11 +42,20 @@ export default function LoginPage() {
     setProcessingLogin(true);
 
     if (isLogin) {
-      const loginSuccess = await login(formUsername, formPassword, () => {});
+      const loginSuccess = await login(
+        formUsername,
+        formPassword,
+        captchaResponse,
+        () => {}
+      );
       setSystemMessage("Failed to login");
       console.log(loginSuccess);
     } else {
-      const signupSuccess = await signup(formUsername, formPassword);
+      const signupSuccess = await signup(
+        formUsername,
+        formPassword,
+        captchaResponse
+      );
       if (!signupSuccess) {
         setSystemMessage("Failed to create user");
       }
@@ -56,6 +68,10 @@ export default function LoginPage() {
   if (username) {
     return <Navigate to={from} replace />;
   }
+
+  const onCaptchaVerify = (token: string, etag: string) => {
+    setCaptchaResponse(token);
+  };
 
   return (
     <>
@@ -88,7 +104,9 @@ export default function LoginPage() {
               <ButtonGroup className="d-flex justify-content-around">
                 <Button
                   onClick={onSubmit}
-                  disabled={!isValid || processingLogin}
+                  disabled={
+                    !isValid || processingLogin || captchaResponse === ""
+                  }
                 >
                   {processingLogin && (
                     <span>
@@ -99,6 +117,12 @@ export default function LoginPage() {
                   {isLogin ? "Login" : "Create an account"}
                 </Button>
               </ButtonGroup>
+              <div className="mt-3">
+                <HCaptcha
+                  sitekey={ENV.HCAPTCHA_SITE_KEY!}
+                  onVerify={onCaptchaVerify}
+                />
+              </div>
             </Card.Footer>
           </Card>
         </div>

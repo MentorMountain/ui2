@@ -8,12 +8,14 @@ export interface LoginResponse {
 
 export async function loginEndpoint(
   username: string,
-  password: string
+  password: string,
+  captchaResponse: string
 ): Promise<LoginResponse> {
   try {
     const response = await axios.post(ENV.API_DOMAIN + "/api/login", {
       username,
       password,
+      captchaResponse
     });
     return response.data as LoginResponse;
   } catch (e) {
@@ -27,12 +29,14 @@ export async function loginEndpoint(
 
 export async function signupEndpoint(
   username: string,
-  password: string
+  password: string,
+  captchaResponse: string
 ): Promise<boolean> {
   try {
     const response = await axios.post(ENV.API_DOMAIN + "/api/login/signup", {
       username,
       password,
+      captchaResponse
     });
     return response.status === 200;
   } catch (e) {
