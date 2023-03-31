@@ -19,7 +19,6 @@ export default function AboutPage() {
     <>
       <h1>About</h1>
       <p>{ENV.API_DOMAIN}</p>
-      <p>{ENV.SFU_CAS_LOGIN}</p>
       <p>Blog: {blogStatus ? "true" : "false"}</p>
       <p>Questions: {questionsStatus ? "true" : "false"}</p>
       <p>Login: {loginStatus ? "true" : "false"}</p>
