@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { HOME_PAGE } from "./paths";
+import { ACCOUNT_PAGE, HOME_PAGE } from "./paths";
 import { useLoginContext } from "./login/auth/LoginContextProvider";
 import { useNavigate } from "react-router-dom";
 import { ABOUT_PAGE } from "./paths";
@@ -33,7 +33,10 @@ export default function NavBar() {
           </Nav>
           <Nav>
             {isLoggedIn && (
-              <Nav.Link onClick={() => navigate(ABOUT_PAGE)}>About</Nav.Link>
+              <>
+                <Nav.Link onClick={() => navigate(ABOUT_PAGE)}>About</Nav.Link>
+                <Nav.Link onClick={() => navigate(ACCOUNT_PAGE)}>Account</Nav.Link>
+              </>
             )}
             {isLoggedIn ? (
               <Nav.Link
