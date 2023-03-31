@@ -89,7 +89,7 @@ export default function LoginPage() {
     <>
       <div className="d-flex mt-4 flex-column">
         <div className="mt-3 d-flex justify-content-around">
-          <Card style={{ width: "20em" }}>
+          <Card style={{ width: "21em" }}>
             <Card.Body>
               <Form onSubmit={(e) => e.preventDefault()}>
                 <Form.Group className="mb-3">
@@ -113,7 +113,7 @@ export default function LoginPage() {
               </Form>
             </Card.Body>
             <Card.Footer>
-              <div className="mt-3">
+              <div className="mb-2">
                 <HCaptcha
                   sitekey={ENV.HCAPTCHA_SITE_KEY!}
                   onVerify={onCaptchaVerify}
