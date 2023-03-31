@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -28,6 +28,16 @@ export default function LoginPage() {
 
   const [captchaResponse, setCaptchaResponse] = useState<string>("");
 
+  const captchaRef = useRef<HCaptcha>(null);
+  const onCaptchaVerify = (token: string, etag: string) => {
+    console.log("Received", token);
+    setCaptchaResponse(token);
+
+    if (!token) {
+      captchaRef.current?.resetCaptcha();
+    }
+  };
+
   const onUsernameChanged = (text: string) => {
     setFormUsername(text);
     setIsValid(text.length > 0 && formPassword.length > 0);
@@ -40,6 +50,7 @@ export default function LoginPage() {
 
   const onSubmit = async () => {
     setProcessingLogin(true);
+    let success = false;
 
     if (isLogin) {
       const loginSuccess = await login(
@@ -48,6 +59,7 @@ export default function LoginPage() {
         captchaResponse,
         () => {}
       );
+      success = success || loginSuccess;
       setSystemMessage("Failed to login");
       console.log(loginSuccess);
     } else {
@@ -56,10 +68,15 @@ export default function LoginPage() {
         formPassword,
         captchaResponse
       );
+      success = success || signupSuccess;
       if (!signupSuccess) {
         setSystemMessage("Failed to create user");
       }
       console.log(signupSuccess);
+    }
+
+    if (!success && captchaRef !== null) {
+      captchaRef.current?.resetCaptcha();
     }
 
     setProcessingLogin(false);
@@ -68,10 +85,6 @@ export default function LoginPage() {
   if (username) {
     return <Navigate to={from} replace />;
   }
-
-  const onCaptchaVerify = (token: string, etag: string) => {
-    setCaptchaResponse(token);
-  };
 
   return (
     <>
@@ -121,6 +134,7 @@ export default function LoginPage() {
                 <HCaptcha
                   sitekey={ENV.HCAPTCHA_SITE_KEY!}
                   onVerify={onCaptchaVerify}
+                  ref={captchaRef}
                 />
               </div>
             </Card.Footer>
