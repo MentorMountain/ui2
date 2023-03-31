@@ -26,6 +26,7 @@ export default function LoginPage() {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [systemMessage, setSystemMessage] = useState<string>("");
 
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [captchaResponse, setCaptchaResponse] = useState<string>("");
 
   const captchaRef = useRef<HCaptcha>(null);
@@ -53,6 +54,11 @@ export default function LoginPage() {
   };
 
   const onSubmit = async () => {
+    if (!showCaptcha) {
+      setShowCaptcha(true);
+      return;
+    }
+
     setProcessingLogin(true);
 
     if (isLogin) {
@@ -112,18 +118,22 @@ export default function LoginPage() {
               </Form>
             </Card.Body>
             <Card.Footer>
-              <div className="mb-2">
-                <HCaptcha
-                  sitekey={ENV.HCAPTCHA_SITE_KEY!}
-                  onVerify={onCaptchaVerify}
-                  ref={captchaRef}
-                />
-              </div>
+              {showCaptcha && (
+                <div className="mb-2">
+                  <HCaptcha
+                    sitekey={ENV.HCAPTCHA_SITE_KEY!}
+                    onVerify={onCaptchaVerify}
+                    ref={captchaRef}
+                  />
+                </div>
+              )}
               <ButtonGroup className="d-flex justify-content-around">
                 <Button
                   onClick={onSubmit}
                   disabled={
-                    !isValid || processingLogin || captchaResponse === ""
+                    !isValid ||
+                    processingLogin ||
+                    (showCaptcha && captchaResponse === "")
                   }
                 >
                   {processingLogin && (
