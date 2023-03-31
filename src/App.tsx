@@ -67,27 +67,23 @@ function App() {
 
   const { isInitialized } = useLoginContext();
 
-  if (!isInitialized) {
-    return (
-      <div className="App">
-        <FullPageSpinner />
-      </div>
-    );
-  }
-
   return (
     <div className="App">
-      <Routes>
-        {pages.map(({ name, path, isProtected, component }) => {
-          const routeElement = isProtected ? (
-            <RequireLogin>{component}</RequireLogin>
-          ) : (
-            component
-          );
+      {isInitialized ? (
+        <Routes>
+          {pages.map(({ name, path, isProtected, component }) => {
+            const routeElement = isProtected ? (
+              <RequireLogin>{component}</RequireLogin>
+            ) : (
+              component
+            );
 
-          return <Route key={name} element={routeElement} path={path} />;
-        })}
-      </Routes>
+            return <Route key={name} element={routeElement} path={path} />;
+          })}
+        </Routes>
+      ) : (
+        <FullPageSpinner />
+      )}
     </div>
   );
 }

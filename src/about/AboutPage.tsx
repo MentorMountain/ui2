@@ -17,7 +17,6 @@ export default function AboutPage() {
 
   return (
     <>
-      <h1>About</h1>
       <p>{ENV.API_DOMAIN}</p>
       <p>Blog: {blogStatus ? "true" : "false"}</p>
       <p>Questions: {questionsStatus ? "true" : "false"}</p>

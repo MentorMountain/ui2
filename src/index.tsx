@@ -5,8 +5,9 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { LoginContextProvider } from "./login/auth/LoginContextProvider";
+import NavBar from "./NavBar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,9 +15,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-        <LoginContextProvider>
+      <LoginContextProvider>
+        <NavBar />
+        <div className="mt-2">
           <App />
-        </LoginContextProvider>
+        </div>
+      </LoginContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

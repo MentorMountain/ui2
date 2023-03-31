@@ -35,7 +35,6 @@ export default function AccountPage() {
 
   return (
     <>
-      <h1>Account</h1>
       <div className="d-flex mt-4 justify-content-center">
         <Card style={{ width: "15rem" }}>
           <Card.Body>
