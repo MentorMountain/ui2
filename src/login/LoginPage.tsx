@@ -29,12 +29,17 @@ export default function LoginPage() {
   const [captchaResponse, setCaptchaResponse] = useState<string>("");
 
   const captchaRef = useRef<HCaptcha>(null);
+
+  const resetCaptcha = () => {
+    captchaRef.current?.resetCaptcha();
+    setCaptchaResponse("");
+  };
   const onCaptchaVerify = (token: string, etag: string) => {
-    console.log("Received", token);
+    console.log("Received captcha token", token);
     setCaptchaResponse(token);
 
     if (!token) {
-      captchaRef.current?.resetCaptcha();
+      resetCaptcha();
     }
   };
 
@@ -50,7 +55,6 @@ export default function LoginPage() {
 
   const onSubmit = async () => {
     setProcessingLogin(true);
-    let success = false;
 
     if (isLogin) {
       const loginSuccess = await login(
@@ -59,7 +63,6 @@ export default function LoginPage() {
         captchaResponse,
         () => {}
       );
-      success = success || loginSuccess;
       setSystemMessage("Failed to login");
       console.log(loginSuccess);
     } else {
@@ -68,17 +71,13 @@ export default function LoginPage() {
         formPassword,
         captchaResponse
       );
-      success = success || signupSuccess;
       if (!signupSuccess) {
         setSystemMessage("Failed to create user");
       }
       console.log(signupSuccess);
     }
 
-    if (!success && captchaRef !== null) {
-      captchaRef.current?.resetCaptcha();
-    }
-
+    resetCaptcha();
     setProcessingLogin(false);
   };
 
