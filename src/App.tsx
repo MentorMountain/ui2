@@ -9,12 +9,14 @@ import LoginPage from "./login/LoginPage";
 import { RequireLogin } from "./login/RequireLogin";
 import {
   ABOUT_PAGE,
+  ACCOUNT_PAGE,
   BLOG_PAGE,
   HOME_PAGE,
   LOGIN_PAGE,
   QUESTIONS_PAGE,
 } from "./paths";
 import QuestionsPage from "./questions/QuestionsPage";
+import AccountPage from "./login/AccountPage";
 
 interface Page {
   name: string;
@@ -36,6 +38,12 @@ function App() {
       path: LOGIN_PAGE,
       component: <LoginPage />,
       isProtected: false,
+    },
+    {
+      name: "Account",
+      path: ACCOUNT_PAGE,
+      component: <AccountPage />,
+      isProtected: true,
     },
     {
       name: "About",

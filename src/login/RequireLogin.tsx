@@ -4,14 +4,14 @@ import { LOGIN_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
 
 export function RequireLogin({ children }: { children: JSX.Element }) {
-  const { computingID, isInitialized } = useLoginContext();
+  const { username, isInitialized } = useLoginContext();
   const location = useLocation();
 
   if (!isInitialized) {
     return <FullPageSpinner />;
   }
 
-  if (!computingID) {
+  if (!username) {
     return <Navigate to={LOGIN_PAGE} state={{ from: location }} replace />;
   }
 

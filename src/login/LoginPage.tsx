@@ -1,84 +1,124 @@
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { useState } from "react";
 import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import ENV from "../env";
+  Alert,
+  Button,
+  ButtonGroup,
+  Card,
+  Form,
+  Spinner,
+  Toast,
+} from "react-bootstrap";
+import { Navigate, useLocation } from "react-router-dom";
 import { HOME_PAGE } from "../paths";
 import { useLoginContext } from "./auth/LoginContextProvider";
 
 export default function LoginPage() {
-  const { login, computingID } = useLoginContext();
-  const reactNavigate = useNavigate();
+  const { login, signup, username } = useLoginContext();
   const reactLocation = useLocation();
 
   const from = reactLocation.state?.from?.pathname || HOME_PAGE;
-
-  const SFU_TICKET_PARAM = "ticket";
-  const location = window.location.href.split("?")[0];
-  const loginLink = `${
-    ENV.SFU_CAS_LOGIN
-  }/?renew=true&service=${encodeURIComponent(location)}`;
-
-  const [isSFUTicketProvided, setIsSFUTicketProvided] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [processingLogin, setProcessingLogin] = useState(false);
+  const [formUsername, setFormUsername] = useState<string>("");
+  const [formPassword, setFormPassword] = useState<string>("");
+  const [isValid, setIsValid] = useState<boolean>(false);
 
-  const onSFULoginClicked = () => {
-    window.location.href = loginLink;
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [systemMessage, setSystemMessage] = useState<string>("");
+
+  const onUsernameChanged = (text: string) => {
+    setFormUsername(text);
+    setIsValid(text.length > 0 && formPassword.length > 0);
   };
 
-  useEffect(() => {
-    setIsSFUTicketProvided(searchParams.has(SFU_TICKET_PARAM));
+  const onPasswordChanged = (text: string) => {
+    setFormPassword(text);
+    setIsValid(formUsername.length > 0 && text.length > 0);
+  };
 
-    if (isSFUTicketProvided) {
-      const ticket = searchParams.get(SFU_TICKET_PARAM)!;
-      setProcessingLogin(true);
+  const onSubmit = async () => {
+    setProcessingLogin(true);
 
-      login(ticket, location, () => console.log("Done login verify"))
-        .then((result) => {
-          if (true) {
-            reactNavigate(HOME_PAGE);
-          }
-          setProcessingLogin(false);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-
-      setSearchParams({});
-      setIsSFUTicketProvided(false);
+    if (isLogin) {
+      const loginSuccess = await login(formUsername, formPassword, () => {});
+      setSystemMessage("Failed to login");
+      console.log(loginSuccess);
+    } else {
+      const signupSuccess = await signup(formUsername, formPassword);
+      if (!signupSuccess) {
+        setSystemMessage("Failed to create user");
+      }
+      console.log(signupSuccess);
     }
-  }, [
-    isSFUTicketProvided,
-    setSearchParams,
-    searchParams,
-    location,
-    login,
-    reactNavigate,
-  ]);
 
-  if (computingID) {
+    setProcessingLogin(false);
+  };
+
+  if (username) {
     return <Navigate to={from} replace />;
   }
 
   return (
     <>
-      <h1>Login</h1>
-      {computingID && <p>Hi {computingID}</p>}
-      {processingLogin && (
-        <>
-          <p>Verifying SFU Login</p>
-        </>
-      )}
-      {!processingLogin && !computingID && (
-        <>
-          <Button onClick={onSFULoginClicked}>Login with SFU</Button>
-        </>
-      )}
+      <div className="d-flex mt-4 flex-column">
+        <div className="mt-3 d-flex justify-content-around">
+          <Card style={{ width: "20em" }}>
+            <Card.Body>
+              <Form onSubmit={(e) => e.preventDefault()}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    onChange={(e) => onUsernameChanged(e.target.value)}
+                    value={formUsername}
+                    type="text"
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    onChange={(e) => onPasswordChanged(e.target.value)}
+                    value={formPassword}
+                    type="password"
+                  />
+                </Form.Group>
+              </Form>
+            </Card.Body>
+            <Card.Footer>
+              <ButtonGroup className="d-flex justify-content-around">
+                <Button
+                  onClick={onSubmit}
+                  disabled={!isValid || processingLogin}
+                >
+                  {processingLogin && (
+                    <span>
+                      <Spinner size="sm" />
+                      {"   "}
+                    </span>
+                  )}
+                  {isLogin ? "Login" : "Create an account"}
+                </Button>
+              </ButtonGroup>
+            </Card.Footer>
+          </Card>
+        </div>
+        <Button
+          onClick={() => setIsLogin(!isLogin)}
+          className="mt-2"
+          variant="link"
+        >
+          {isLogin ? "Create an account" : "I already have an account"}
+        </Button>
+        <div className="mt-4 d-flex justify-content-around">
+          <Toast
+            show={systemMessage.length > 0}
+            onClose={() => setSystemMessage("")}
+            delay={4000}
+            autohide
+          >
+            <Toast.Header>Login</Toast.Header>
+            <Toast.Body>{systemMessage}</Toast.Body>
+          </Toast>
+        </div>
+      </div>
     </>
   );
 }
