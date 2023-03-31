@@ -17,9 +17,7 @@ root.render(
     <BrowserRouter>
       <LoginContextProvider>
         <NavBar />
-        <div className="mt-2">
-          <App />
-        </div>
+        <App />
       </LoginContextProvider>
     </BrowserRouter>
   </React.StrictMode>

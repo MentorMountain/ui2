@@ -17,6 +17,7 @@ import {
 } from "./paths";
 import QuestionsPage from "./questions/QuestionsPage";
 import AccountPage from "./login/AccountPage";
+import { Container } from "react-bootstrap";
 
 interface Page {
   name: string;
@@ -68,22 +69,24 @@ function App() {
   const { isInitialized } = useLoginContext();
 
   return (
-    <div className="App">
-      {isInitialized ? (
-        <Routes>
-          {pages.map(({ name, path, isProtected, component }) => {
-            const routeElement = isProtected ? (
-              <RequireLogin>{component}</RequireLogin>
-            ) : (
-              component
-            );
+    <div className="App mt-3">
+      <Container>
+        {isInitialized ? (
+          <Routes>
+            {pages.map(({ name, path, isProtected, component }) => {
+              const routeElement = isProtected ? (
+                <RequireLogin>{component}</RequireLogin>
+              ) : (
+                component
+              );
 
-            return <Route key={name} element={routeElement} path={path} />;
-          })}
-        </Routes>
-      ) : (
-        <FullPageSpinner />
-      )}
+              return <Route key={name} element={routeElement} path={path} />;
+            })}
+          </Routes>
+        ) : (
+          <FullPageSpinner />
+        )}
+      </Container>
     </div>
   );
 }
