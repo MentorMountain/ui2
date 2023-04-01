@@ -11,10 +11,16 @@ export default function BlogPost({
     postID,
 }: BlogPostProps) {
   return (
-    <div>
-      <Image src={profilePicture}
-             roundedCircle={true}/>
-      <p>title: {title} | content: {content} | authorUsername: {authorUsername} | creationTime: {creationTime} | postID : {postID ? postID : "unknown"}</p>
-    </div>
+    <article>
+      <header>
+        <Image src={profilePicture}
+              roundedCircle={true}/>
+        <p>authorUsername: {authorUsername} | creationTime: {creationTime} | postID : {postID ? postID : "unknown"}</p>
+      </header>
+      <section>
+        <h2>title: {title}</h2>
+        <p>content: {content}</p>
+      </section>
+    </article>
   );
 }

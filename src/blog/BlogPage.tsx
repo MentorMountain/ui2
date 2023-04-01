@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
+import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 
