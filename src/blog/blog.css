@@ -11,6 +11,12 @@ article {
   margin: 15px 0px;
 }
 
+article > hr {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Blog Post Header */
 article > header {
   display: flex;
