@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { BlogPost } from "./BlogPost";
+import { BlogPostProps } from "./BlogPost.model";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 
 export default function BlogPage() {
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
-    [
-      {"title": "post-1", "content": "lelelelelelee"},
-      {"title": "post-2", "content": "lelelelelelee"},
-      {"title": "post-3", "content": "lelelelelelee"},
-      {"title": "post-4", "content": "lelelelelelee"},
-    ]
-  );
+  const [blogPosts, setBlogPosts] = useState<BlogPostProps[]>([]);
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
+
+  const tempAddBlogPost = () => setBlogPosts([...blogPosts,
+                                              { "title": "new title",
+                                                "content": "new content",
+                                                "authorUsername": "gamer",
+                                                "creationTime": Date.now() }
+                                             ]); // TODO-JAROD: REMOVE
 
   const submitBlogPost = ({ title, content }: BlogPostInformationProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it 
@@ -26,6 +26,8 @@ export default function BlogPage() {
   return (
     <>
       <Button onClick={showModal}>Create Blog Post</Button>
+      <hr></hr>
+      <Button onClick={tempAddBlogPost}>Dummy Add</Button>
       <BlogPostCreator
         show={showPostCreator}
         onShow={showModal}
