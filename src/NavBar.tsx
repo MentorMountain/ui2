@@ -35,7 +35,9 @@ export default function NavBar() {
             {isLoggedIn && (
               <>
                 <Nav.Link onClick={() => navigate(ABOUT_PAGE)}>About</Nav.Link>
-                <Nav.Link onClick={() => navigate(ACCOUNT_PAGE)}>Account</Nav.Link>
+                <Nav.Link onClick={() => navigate(ACCOUNT_PAGE)}>
+                  Account
+                </Nav.Link>
               </>
             )}
             {isLoggedIn ? (
@@ -47,6 +49,7 @@ export default function NavBar() {
             ) : (
               <Nav.Link onClick={() => navigate(LOGIN_PAGE)}>Login</Nav.Link>
             )}
+            {isLoggedIn && <Navbar.Text>({username})</Navbar.Text>}
           </Nav>
         </Navbar.Collapse>
       </Container>

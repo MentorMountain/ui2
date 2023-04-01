@@ -2,7 +2,6 @@ import { ServiceStatus } from "./ServiceStatus";
 
 export default function ServiceRow({ service }: any) {
   const { isOnline, name, responseTime }: ServiceStatus = service;
-  console.log("name", name)
   return (
     <tr>
       <td>{name}</td>
