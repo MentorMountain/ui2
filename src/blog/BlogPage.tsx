@@ -16,8 +16,9 @@ export default function BlogPage() {
   const tempAddBlogPost = () => setBlogPosts([...blogPosts,
                                               { "title": "An Insightful Title About Meaningful Info",
                                                 "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a augue vel sapien aliquam malesuada. Integer id ligula vehicula, aliquet quam id, iaculis leo. Integer condimentum, sem eget mattis pretium, nisi nibh tempor arcu, nec finibus augue lacus sed odio. Phasellus convallis sagittis fringilla. Pellentesque a semper justo. Sed porta felis ac lacus vestibulum, vitae laoreet ante vulputate. Suspendisse ullamcorper, nisl tristique ornare sagittis, quam dolor efficitur sem, quis bibendum felis elit vitae neque. Pellentesque sagittis lacus at purus porttitor, nec pretium magna volutpat. Sed facilisis condimentum ligula, ut ullamcorper lorem molestie ut. Sed sit amet metus tellus. Nam velit.",
-                                                "authorUsername": "gamer",
-                                                "creationTime": Date.now() }
+                                                "authorID": "gamer",
+                                                "date": Date.now(),
+                                                "postID": "placeholder"}
                                              ]); // TODO-JAROD: REMOVE
 
   const { jwt } = useLoginContext();
@@ -30,11 +31,20 @@ export default function BlogPage() {
     hideModal();
   };
 
+  const retrieveBlogPosts = () => {
+    getBlogPosts(jwt).then((responseInfo) => {
+      if (responseInfo.success && responseInfo.data !== undefined) {
+        setBlogPosts(responseInfo.data);
+      }
+    });
+  };
+
   return (
     <div className="blog-container">
       <Button onClick={showModal}>Create Blog Post</Button>
       <hr></hr>
       <Button onClick={tempAddBlogPost}>Dummy Add</Button>
+      <Button onClick={retrieveBlogPosts}>Trigger Get</Button>
       <BlogPostCreator
         show={showPostCreator}
         onShow={showModal}
