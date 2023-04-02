@@ -20,12 +20,12 @@ export default function BlogPage() {
                                                 "creationTime": Date.now() }
                                              ]); // TODO-JAROD: REMOVE
 
-  const { jwt, username } = useLoginContext();
+  const { jwt } = useLoginContext();
 
   const submitBlogPost = ({ title, content }: BlogPostInformationProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it 
     console.info(`BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`);
-    createBlogPost(jwt, username, title, content);
+    createBlogPost(jwt, title, content);
     hideModal();
   };
 
