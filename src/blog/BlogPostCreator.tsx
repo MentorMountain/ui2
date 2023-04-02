@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 
 export interface BlogPostInformationProps {
   title: string;
@@ -10,7 +10,7 @@ interface BlogPostCreatorProps {
   show: boolean;
   onShow: VoidFunction;
   onHide: VoidFunction;
-  onSubmit: (props: BlogPostInformationProps) => void;
+  onSubmit: (props: BlogPostInformationProps) => Promise<boolean>;
 }
 
 const DEFAULT_TEXT = "";
@@ -25,6 +25,7 @@ export default function BlogPostCreator({
   const [content, setContent] = useState<string>(DEFAULT_TEXT);
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
+  const [isRequestProcessing, setIsRequestProcessing] = useState<boolean>(false);
 
   const showModal = () => {
     // Clear pre-existing warnings since user hasn't started typing yet
@@ -39,6 +40,20 @@ export default function BlogPostCreator({
     setTitle(DEFAULT_TEXT);
     setContent(DEFAULT_TEXT);
     onHide();
+  };
+
+  const submitPost = () => {
+    if (checkTitleValidity(title) && checkContentValidity(content)) {
+      setIsRequestProcessing(true);
+      onSubmit({ title, content }).then((wasSuccessful) => {
+        setIsRequestProcessing(false);
+        if (wasSuccessful) {
+          hideModal();
+        } else {
+          // TODO-JAROD: Toast that unsuccessful!
+        }
+      });
+    }
   };
 
   const checkTitleValidity = (title: string): boolean => {
@@ -63,12 +78,6 @@ export default function BlogPostCreator({
   const updateContent = (text: string) => {
     setContent(text);
     setIsContentValid(checkContentValidity(text));
-  };
-
-  const submitPost = () => {
-    if (checkTitleValidity(title) && checkContentValidity(content)) {
-      onSubmit({ title, content });
-    }
   };
 
   return (
@@ -103,10 +112,19 @@ export default function BlogPostCreator({
           Close
         </Button>
         <Button
+          style={{width: "76px"}}
           variant="primary"
-          disabled={!checkTitleValidity(title) || !checkContentValidity(content)}
+          disabled={!checkTitleValidity(title) || !checkContentValidity(content) || isRequestProcessing}
           onClick={submitPost}>
-          Submit
+          <Spinner
+            className={isRequestProcessing ? "" : "visually-hidden"}
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          <span className={isRequestProcessing ? "visually-hidden" : ""}>Submit</span>
         </Button>
       </Modal.Footer>
     </Modal>
