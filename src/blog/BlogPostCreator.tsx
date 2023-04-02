@@ -30,7 +30,8 @@ export default function BlogPostCreator({
     // Clear pre-existing warnings since user hasn't started typing yet
     setIsTitleValid(true);
     setIsContentValid(true);
-
+    setTitle(DEFAULT_TEXT);
+    setContent(DEFAULT_TEXT);
     onShow();
   };
 
