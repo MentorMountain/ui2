@@ -72,11 +72,12 @@ export default function BlogPostCreator({
     if (checkTitleValidity(title) && checkContentValidity(content)) {
       let submittedTitle: string = title.trim();
       let submittedContent: string = content.trim();
-      
+
       setShowToast(false);
       setIsRequestProcessing(true);
       
-      // Default text replacement handling
+      // Default text replacement handling - async/await necessary for a sleep() which simulates...
+      // ...loading in the case of an <ERROR> text replacement
       [ submittedTitle, submittedContent ] = await replaceDefaultText(submittedTitle, submittedContent);
 
       onSubmit({
