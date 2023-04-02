@@ -1,15 +1,31 @@
 import { BlogPostProps } from "./BlogPost.model";
 import BlogPost from "./BlogPost";
+import { Spinner } from "react-bootstrap";
 
 interface BlogListProps {
+  isGettingBlogs: boolean;
   blogList: BlogPostProps[];
 }
 
 export default function BlogList({
+  isGettingBlogs,
   blogList,
 }: BlogListProps) {
+  const shouldShowSpinner: boolean = isGettingBlogs;
+
   return (
-    <div>
+    <div className="blog-list">
+      <hr className={shouldShowSpinner ? "" : "visually-hidden"}/>
+      <div className="blog-list-spinner-container">
+        <Spinner
+          className={shouldShowSpinner ? "" : "visually-hidden"}
+          as="span"
+          variant="primary"
+          animation="grow"
+          role="status"
+          aria-hidden="true"
+        />
+      </div>
       {
         blogList.map((blogPost) => (
           <BlogPost

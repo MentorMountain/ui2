@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { createBlogPost, getBlogPosts, createBlogPostResponse } from "./service/BlogService";
+import { createBlogPost, getBlogPosts } from "./service/BlogService";
 import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
@@ -10,6 +10,8 @@ import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 export default function BlogPage() {
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
   const [blogPosts, setBlogPosts] = useState<BlogPostProps[]>([]);
+  const [isFreshPageLoad, setIsFreshPageLoad] = useState<boolean>(true);
+  const [isGettingBlogs, setIsGettingBlogs] = useState<boolean>(false);
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
 
@@ -28,13 +30,22 @@ export default function BlogPage() {
     return await createBlogPost(jwt, title, content);
   };
 
-  const retrieveBlogPosts = () => {
+  const retrieveBlogPosts = async () => { // TODO-JAROD: Remove async with sleep
+    setIsGettingBlogs(true);
+    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
     getBlogPosts(jwt).then((responseInfo) => {
       if (responseInfo.success && responseInfo.data !== undefined) {
         setBlogPosts(responseInfo.data);
       }
+      setIsFreshPageLoad(false);
+      setIsGettingBlogs(false);
     });
   };
+
+  // Load blog list automatically upon page load
+  if (isFreshPageLoad && !isGettingBlogs) {
+    retrieveBlogPosts();
+  }
 
   return (
     <div className="blog-container">
@@ -49,6 +60,7 @@ export default function BlogPage() {
         onHide={hideModal}
       />
       <BlogList
+        isGettingBlogs={isGettingBlogs}
         blogList={blogPosts}
       />
     </div>
