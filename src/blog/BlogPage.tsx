@@ -35,7 +35,7 @@ export default function BlogPage() {
     // Additionally, this unique key should be consistent, not regenerated each display
     // Therefore, for performance reasons, LOCAL blog posts use creation date as key.
     const newBlogPost: BlogPostProps = {
-      postID: JSON.stringify(Date.now()),
+      postID: `LC-${Date.now()}`,
       authorID: username,
       date: Date.now(),
       title: title,
