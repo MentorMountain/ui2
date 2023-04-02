@@ -7,6 +7,46 @@
   width: 800px;
 }
 
+.blog-container > h1 {
+  text-align: center;
+}
+
+.blog-container > hr {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#blog-blurb {
+  display: flex;
+}
+
+#blog-blurb > #blog-welcome-blurb {
+  flex: 1 1 auto;
+  padding-right: 15px;
+}
+
+#blog-blurb > #mentor-call-to-action {
+  flex: 1 0 auto;
+  width: 22%;
+  border-left: 1px solid lightgray;
+}
+
+#blog-blurb > #mentor-call-to-action > #mentor-cta-button {
+  display: flex;
+  justify-content: center;
+}
+
+#blog-blurb h2 {
+  text-align: center;
+}
+
+#blog-blurb > #mentor-call-to-action > * {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .blog-list-spinner-container {
   display: flex;
   justify-content: center;

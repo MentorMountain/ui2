@@ -78,7 +78,38 @@ export default function BlogPage() {
 
   return (
     <div className="blog-container">
-      <Button onClick={showModal}>Create Blog Post</Button>
+      <h1>Mentor Mountain Blogs</h1>
+      <hr></hr>
+      <div id="blog-blurb" className="container">
+        <div id="blog-welcome-blurb">
+          <h2>Welcome!</h2>
+          <p>
+            This is our mentor blog page, where our experienced and knowledgeable student mentors
+            share valuable information and insights to help you navigate your university and
+            professional journey with confidence.
+          </p>
+          <p>
+            Our mentors come from a diverse range of backgrounds and have been through the ups and
+            downs of university life themselves.
+          </p>
+          <p>
+            They are here to provide guidance and support to students like you by sharing their past
+            experiences and accumulated knowledge.
+          </p>
+          <p>
+            From study tips and career advice to personal anecdotes and reflections, our mentors are
+            committed to helping you succeed!
+          </p>
+        </div>
+        <div id="mentor-call-to-action">
+          <h2>Mentors</h2>
+          <p>Welcome mentors!</p>
+          <p>Click this button to contribute your experiences!</p>
+          <div id="mentor-cta-button">
+            <Button onClick={showModal}>Create Blog Post</Button>
+          </div>
+        </div>
+      </div>
       <BlogPostCreator
         show={showPostCreator}
         onShow={showModal}
