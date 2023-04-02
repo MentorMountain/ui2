@@ -51,7 +51,10 @@ export default function BlogPostCreator({
   const submitPost = () => {
     if (checkTitleValidity(title) && checkContentValidity(content)) {
       setIsRequestProcessing(true);
-      onSubmit({ title, content }).then((submitResponse: createBlogPostResponse) => {
+      onSubmit({
+        title: title.trim(),
+        content: content.trim()
+      }).then((submitResponse: createBlogPostResponse) => {
         setIsRequestProcessing(false);
         if (submitResponse.success) {
           hideModal();
