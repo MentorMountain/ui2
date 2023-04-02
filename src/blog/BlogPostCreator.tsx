@@ -17,7 +17,7 @@ interface BlogPostCreatorProps {
 const DEFAULT_TEXT = "";
 
 export default function BlogPostCreator({
-  show, // TODO-JAROD: on-show to set isTitleValid and isContentValid to true
+  show,
   onShow,
   onHide,
   onSubmit,
@@ -34,7 +34,7 @@ export default function BlogPostCreator({
   const [toastBody, setToastBody] = useState<string>("");
 
   const showModal = () => {
-    // Clear pre-existing warnings since user hasn't started typing yet
+    // Clear pre-existing warnings & values since user hasn't started typing yet
     setIsTitleValid(true);
     setIsContentValid(true);
     setTitle(DEFAULT_TEXT);
