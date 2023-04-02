@@ -6,8 +6,13 @@ import profilePicture from './placeholderProfilePicture.png';
 // Source: https://stackoverflow.com/questions/18679576/counting-words-in-string
 // Source: https://speechify.com/blog/reading-time/
 function calcTextReadTimeInMinutes(text: string): number {
-  const numOfWords = text.trim().split(/\s+/).length;
-  return Math.max(1, Math.round(numOfWords / 200));
+  if (text) {
+    const numOfWords = text.trim().split(/\s+/).length;
+    return Math.max(1, Math.round(numOfWords / 200));
+  } else {
+    console.error("Blog post text is undefined");
+    return 0;
+  }
 }
 
 export default function BlogPost({
