@@ -4,14 +4,14 @@ import ENV from "../../env";
 import { BlogPostData } from "./BlogPostData";
 
 export interface createBlogPostResponse {
-  success: boolean; // TODO-JAROD: 201    and    400                             and    403 are possible codes
-  message?: string; // Question created    and    Invalid required information    and    Invalid user role
+  success: boolean;
+  message?: string;
 }
 
 export interface getBlogPostsResponse {
-  success: boolean; // TODO-JAROD: 200    and    400
-  message: string; // All question IDs    and    Invalid request
-  data: BlogPostData[]; // Blog posts
+  success: boolean;
+  message?: string;
+  data?: BlogPostData[];
 }
 
 export async function blogHealthEndpoint(): Promise<boolean> {
@@ -24,7 +24,6 @@ export async function blogHealthEndpoint(): Promise<boolean> {
   }
 }
 
-// Create
 export async function createBlogPost(
   jwt: string,
   title: string,
@@ -66,18 +65,34 @@ export async function createBlogPost(
   }
 }
 
-// Get
-export async function getBlogPosts(): Promise<getBlogPostsResponse> {
-  // might need login context
-  return {
-    success: true,
-    message: "placeholder",
-    data: [{
-      postID: "placeholder",
-      authorID: "placeholder",
-      date: Date.now(),
-      title: "placeholder",
-      content: "placeholder",
-    }],
-  } as getBlogPostsResponse;
+export async function getBlogPosts(jwt: string): Promise<getBlogPostsResponse> {
+  try {
+    const requestURL = ENV.API_DOMAIN + "/api/blog";
+    const requestHeaders = {
+      headers: {
+        Authorization: jwt
+      }
+    };
+
+    const response = await axios.get(requestURL, requestHeaders);
+
+    switch (response.status) {
+      case 200:
+        return {
+          success: true,
+          message: "All blog posts",
+          data: response.data,
+        };
+      case 400:
+        return {
+          success: false,
+          message: "Invalid request",
+        };
+      default: // Unknown error
+        return { success: false };
+    }
+  } catch (e) {
+    console.error(e);
+    return { success: false };
+  }
 }

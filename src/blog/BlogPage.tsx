@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { createBlogPost } from "./service/BlogService";
+import { createBlogPost, getBlogPosts } from "./service/BlogService";
 import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
@@ -25,7 +25,8 @@ export default function BlogPage() {
   const submitBlogPost = ({ title, content }: BlogPostInformationProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it 
     console.info(`BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`);
-    createBlogPost(jwt, title, content);
+    createBlogPost(jwt, title, content).then((_) => console.log("done post!"));
+    getBlogPosts(jwt).then((_) => console.log("done get!"));
     hideModal();
   };
 
