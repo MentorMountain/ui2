@@ -7,6 +7,10 @@ import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 
+function blogPostDateComparator(left: BlogPostProps, right: BlogPostProps) {
+  return right.date - left.date;
+}
+
 export default function BlogPage() {
   // Blog post & list handling
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
@@ -17,17 +21,9 @@ export default function BlogPage() {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastTitle, setToastTitle] = useState<string>("");
   const [toastBody, setToastBody] = useState<string>("");
-
+  // Modal visiblity functions
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
-
-  const tempAddBlogPost = () => setBlogPosts([...blogPosts,
-                                              { "title": "An Insightful Title About Meaningful Info",
-                                                "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a augue vel sapien aliquam malesuada. Integer id ligula vehicula, aliquet quam id, iaculis leo. Integer condimentum, sem eget mattis pretium, nisi nibh tempor arcu, nec finibus augue lacus sed odio. Phasellus convallis sagittis fringilla. Pellentesque a semper justo. Sed porta felis ac lacus vestibulum, vitae laoreet ante vulputate. Suspendisse ullamcorper, nisl tristique ornare sagittis, quam dolor efficitur sem, quis bibendum felis elit vitae neque. Pellentesque sagittis lacus at purus porttitor, nec pretium magna volutpat. Sed facilisis condimentum ligula, ut ullamcorper lorem molestie ut. Sed sit amet metus tellus. Nam velit.",
-                                                "authorID": "gamer",
-                                                "date": Date.now(),
-                                                "postID": "placeholder"}
-                                             ]); // TODO-JAROD: REMOVE
 
   const { jwt } = useLoginContext();
 
@@ -36,12 +32,12 @@ export default function BlogPage() {
     return await createBlogPost(jwt, title, content);
   };
 
-  const retrieveBlogPosts = async () => { // TODO-JAROD: Remove async with sleep
+  const retrieveBlogPosts = async () => { // TODO-JAROD: REMOVE ASYNC WITH TESTING SLEEP
     setIsGettingBlogs(true);
     await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
     getBlogPosts(jwt).then((responseInfo: getBlogPostsResponse) => {
       if (responseInfo.success && responseInfo.data !== undefined) {
-        setBlogPosts(responseInfo.data);
+        setBlogPosts(responseInfo.data.sort(blogPostDateComparator));
       } else {
         setToastTitle("⛔ Blog List Retrieval Error ⛔");
         setToastBody(responseInfo.message || "Unknown error");
