@@ -6,7 +6,6 @@ import { questionsHealthEndpoint } from "../questions/service/QuestionsService";
 import { Table } from "react-bootstrap";
 import { ServiceStatus } from "./ServiceStatus";
 import ServiceRow from "./ServiceRow";
-import { time } from "console";
 
 function defaultServiceStatus(name: string): ServiceStatus {
   return {
