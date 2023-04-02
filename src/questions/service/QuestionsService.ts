@@ -8,10 +8,16 @@ export interface postGeneric {
   message?: string;
 }
 
-export interface getQuestions {
+export interface getQuestionIDs {
   success: boolean;
   message?: string;
-  questions?: Question[];
+  questionIDs?: string[];
+}
+
+export interface GetQuestion {
+  success: boolean;
+  message?: string;
+  question?: Question;
 }
 
 export interface getQuestionResponses {
@@ -102,8 +108,57 @@ export async function postQuestion(
   }
 }
 
-//Get all questions
-export async function getQuestions(jwt: string): Promise<getQuestions> {
+//Get a question title and its content.
+export async function getQuestion(
+  jwt: string,
+  questionID: string,
+): Promise<GetQuestion> {
+  try {
+    const requestURL = ENV.API_DOMAIN + "/api/questions/"+questionID;
+    const requestHeaders = {
+      headers: {
+        Authorization: jwt
+      }
+    };
+
+    const response = await axios.get(requestURL, requestHeaders);
+
+    switch (response.status) {
+      case 200:
+        return {
+          success: true,
+          message: "Question content successfully received",
+          question:response.data,
+        };
+      case 400:
+        return {
+          success: false,
+          message: "Invalid required information",
+        };
+      case 401:
+        return {
+          success: false,
+          message: "Invalid login credentials",
+        };
+      case 403:
+        return {
+          success: false,
+          message: "Invalid user role",
+        };
+      default: // Unknown error
+        return { 
+          success: false,
+          message: response.status.toString(),
+         };
+    }
+  } catch (e) {
+    console.error(e);
+    return { success: false };
+  }
+}
+
+//Get all question ids
+export async function getQuestionIDs(jwt: string): Promise<getQuestionIDs> {
   try {
     const requestURL = ENV.API_DOMAIN + QUESTIONS_API_ENDPOINTS.GET_QUESTIONS;
     const requestHeaders = {
@@ -119,7 +174,7 @@ export async function getQuestions(jwt: string): Promise<getQuestions> {
         return {
           success: true,
           message: "All student-submitted questions",
-          questions: response.data,
+          questionIDs: response.data,
         };
       case 400:
         return {
