@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { Button, Form, Modal, Spinner, Toast } from "react-bootstrap";
+import { createBlogPostResponse } from "./service/BlogService";
 
 export interface BlogPostInformationProps {
   title: string;
@@ -10,7 +11,7 @@ interface BlogPostCreatorProps {
   show: boolean;
   onShow: VoidFunction;
   onHide: VoidFunction;
-  onSubmit: (props: BlogPostInformationProps) => Promise<boolean>;
+  onSubmit: (props: BlogPostInformationProps) => Promise<createBlogPostResponse>;
 }
 
 const DEFAULT_TEXT = "";
@@ -21,11 +22,16 @@ export default function BlogPostCreator({
   onHide,
   onSubmit,
 }: BlogPostCreatorProps) {
+  // Title/Content handling
   const [title, setTitle] = useState<string>(DEFAULT_TEXT);
   const [content, setContent] = useState<string>(DEFAULT_TEXT);
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
   const [isContentValid, setIsContentValid] = useState<boolean>(true);
+  // Request processing
   const [isRequestProcessing, setIsRequestProcessing] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastTitle, setToastTitle] = useState<string>("");
+  const [toastBody, setToastBody] = useState<string>("");
 
   const showModal = () => {
     // Clear pre-existing warnings since user hasn't started typing yet
@@ -45,12 +51,14 @@ export default function BlogPostCreator({
   const submitPost = () => {
     if (checkTitleValidity(title) && checkContentValidity(content)) {
       setIsRequestProcessing(true);
-      onSubmit({ title, content }).then((wasSuccessful) => {
+      onSubmit({ title, content }).then((submitResponse: createBlogPostResponse) => {
         setIsRequestProcessing(false);
-        if (wasSuccessful) {
+        if (submitResponse.success) {
           hideModal();
         } else {
-          // TODO-JAROD: Toast that unsuccessful!
+          setToastTitle("⛔ Blog Post Submission Error ⛔");
+          setToastBody(submitResponse.message || "Unknown error");
+          setShowToast(true);
         }
       });
     }
@@ -127,6 +135,18 @@ export default function BlogPostCreator({
           <span className={isRequestProcessing ? "visually-hidden" : ""}>Submit</span>
         </Button>
       </Modal.Footer>
+
+      <Toast style={{position: "fixed", right: 1, top: 1}}
+             bg="light"
+             onClose={() => setShowToast(false)}
+             show={showToast}
+             delay={4000}
+             autohide>
+        <Toast.Header>
+          <strong className="me-auto">{toastTitle}</strong>
+        </Toast.Header>
+        <Toast.Body>{toastBody}</Toast.Body>
+      </Toast>
     </Modal>
   );
 }
