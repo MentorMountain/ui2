@@ -121,7 +121,7 @@ export default function BlogPage() {
         isGettingBlogs={isGettingBlogs}
         blogList={blogPosts}
       />
-      <Toast style={{position: "fixed", right: 1, top: 1}}
+      <Toast style={{position: "fixed", left: "50%", bottom: "25px", marginLeft: "-174px"}}
              bg="light"
              onClose={() => setShowToast(false)}
              show={showToast}
