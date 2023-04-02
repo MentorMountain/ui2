@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Toast } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { createBlogPost, getBlogPosts } from "./service/BlogService";
+import { createBlogPost, getBlogPosts, getBlogPostsResponse } from "./service/BlogService";
 import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
 
 export default function BlogPage() {
+  // Blog post & list handling
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
   const [blogPosts, setBlogPosts] = useState<BlogPostProps[]>([]);
+  // Request Processing
   const [isFreshPageLoad, setIsFreshPageLoad] = useState<boolean>(true);
   const [isGettingBlogs, setIsGettingBlogs] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastTitle, setToastTitle] = useState<string>("");
+  const [toastBody, setToastBody] = useState<string>("");
+
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
 
@@ -33,9 +39,13 @@ export default function BlogPage() {
   const retrieveBlogPosts = async () => { // TODO-JAROD: Remove async with sleep
     setIsGettingBlogs(true);
     await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
-    getBlogPosts(jwt).then((responseInfo) => {
+    getBlogPosts(jwt).then((responseInfo: getBlogPostsResponse) => {
       if (responseInfo.success && responseInfo.data !== undefined) {
         setBlogPosts(responseInfo.data);
+      } else {
+        setToastTitle("⛔ Blog List Retrieval Error ⛔");
+        setToastBody(responseInfo.message || "Unknown error");
+        setShowToast(true);
       }
       setIsFreshPageLoad(false);
       setIsGettingBlogs(false);
@@ -50,9 +60,6 @@ export default function BlogPage() {
   return (
     <div className="blog-container">
       <Button onClick={showModal}>Create Blog Post</Button>
-      <hr></hr>
-      <Button onClick={tempAddBlogPost}>Dummy Add</Button>
-      <Button onClick={retrieveBlogPosts}>Trigger Get</Button>
       <BlogPostCreator
         show={showPostCreator}
         onShow={showModal}
@@ -63,6 +70,17 @@ export default function BlogPage() {
         isGettingBlogs={isGettingBlogs}
         blogList={blogPosts}
       />
+      <Toast style={{position: "fixed", right: 1, top: 1}}
+             bg="light"
+             onClose={() => setShowToast(false)}
+             show={showToast}
+             delay={4000}
+             autohide>
+        <Toast.Header>
+          <strong className="me-auto">{toastTitle}</strong>
+        </Toast.Header>
+        <Toast.Body>{toastBody}</Toast.Body>
+      </Toast>
     </div>
   );
 }
