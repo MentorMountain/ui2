@@ -17,11 +17,12 @@ interface BlogPostCreatorProps {
 
 const DEFAULT_TEXT = "";
 
+// TODO-PROD-LONGTERM: REMOVE DEMO TEXT REPLACEMENT
 // Replace instances of <DEFAULT_LONG>, <ERROR>, etc... with appropriate text
 async function replaceDefaultText(title: string, content: string): Promise<[ string, string ]> {
   // If error is in any text, we sleep in order to demo the loading animation 
   if (title.includes("<ERROR>") || content.includes("<ERROR>")) {
-    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: SLEEP FOR DEMO PURPOSES
+    await new Promise(r => setTimeout(r, 2000)); // TODO-PROD-LONGTERM: REMOVE DEMO SLEEP
   }
 
   // Replace keyword instances inside title

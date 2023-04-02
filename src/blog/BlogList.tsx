@@ -42,7 +42,7 @@ export default function BlogList({
       {
         blogList.map((blogPost) => (
           <BlogPost
-            key={blogPost.postID} // TODO-JAROD: Add support for local cache
+            key={blogPost.postID}
             title={blogPost.title}
             content={blogPost.content}
             authorID={blogPost.authorID}

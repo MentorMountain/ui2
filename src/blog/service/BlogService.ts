@@ -39,9 +39,10 @@ export async function createBlogPost(
   title = title.trim();
   content = content.trim();
   if (!isBlogPostPropsValid(title, content)) {
+    console.error("Blog post data invalid; won't make HTTP request");
     return {
       success: false,
-      message: "Blog post content invalid",
+      message: "Blog post data invalid",
     };
   }
 

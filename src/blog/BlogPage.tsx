@@ -45,7 +45,6 @@ export default function BlogPage() {
   };
 
   const submitBlogPost = async ({ title, content }: BlogPostInformationProps) => {
-    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
     const response: createBlogPostResponse = await createBlogPost(jwt, title, content);
     if (response.success) {
       // The user-facing blog list is updated using local content to prevent...
@@ -55,9 +54,8 @@ export default function BlogPage() {
     return response;
   };
 
-  const retrieveBlogPosts = async () => { // TODO-JAROD: REMOVE ASYNC WITH TESTING SLEEP
+  const retrieveBlogPosts = () => {
     setIsGettingBlogs(true);
-    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
     getBlogPosts(jwt).then((responseInfo: getBlogPostsResponse) => {
       if (responseInfo.success && responseInfo.data !== undefined) {
         setBlogPosts(responseInfo.data.sort(blogPostDateComparator));
