@@ -28,7 +28,6 @@ export default function HomePage() {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <br />
           </Col>
           <Col md="6" lg="5" className="d-md-flex">
             <Card>
