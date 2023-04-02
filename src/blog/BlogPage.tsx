@@ -25,8 +25,7 @@ export default function BlogPage() {
 
   const submitBlogPost = async ({ title, content }: BlogPostInformationProps) => {
     await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
-    const responseInfo: createBlogPostResponse =  await createBlogPost(jwt, title, content);
-    return responseInfo.success;
+    return await createBlogPost(jwt, title, content);
   };
 
   const retrieveBlogPosts = () => {
