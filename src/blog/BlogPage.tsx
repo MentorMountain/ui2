@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Button, Toast } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { createBlogPost, getBlogPosts, getBlogPostsResponse } from "./service/BlogService";
+import { createBlogPost,
+         createBlogPostResponse,
+         getBlogPosts,
+         getBlogPostsResponse } from "./service/BlogService";
 import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
@@ -25,11 +28,31 @@ export default function BlogPage() {
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
 
-  const { jwt } = useLoginContext();
+  const { jwt, username } = useLoginContext();
+
+  const updateLocalBlogList = (username: string, title: string, content: string) => {
+    // React requires a unique key for each visual element within a list of components
+    // Additionally, this unique key should be consistent, not regenerated each display
+    // Therefore, for performance reasons, LOCAL blog posts use creation date as key.
+    const newBlogPost: BlogPostProps = {
+      postID: JSON.stringify(Date.now()),
+      authorID: username,
+      date: Date.now(),
+      title: title,
+      content: content,
+    };
+    setBlogPosts([...blogPosts, newBlogPost].sort(blogPostDateComparator));
+  };
 
   const submitBlogPost = async ({ title, content }: BlogPostInformationProps) => {
     await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
-    return await createBlogPost(jwt, title, content);
+    const response: createBlogPostResponse = await createBlogPost(jwt, title, content);
+    if (response.success) {
+      // The user-facing blog list is updated using local content to prevent...
+      // ...re-querying the entire list of blogs for every new post made
+      updateLocalBlogList(username, title, content);
+    }
+    return response;
   };
 
   const retrieveBlogPosts = async () => { // TODO-JAROD: REMOVE ASYNC WITH TESTING SLEEP
