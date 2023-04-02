@@ -28,7 +28,7 @@ export default function BlogPage() {
   const showModal = () => setShowPostCreator(true);
   const hideModal = () => setShowPostCreator(false);
 
-  const { jwt, username } = useLoginContext();
+  const { jwt, username, role } = useLoginContext();
 
   const updateLocalBlogList = (username: string, title: string, content: string) => {
     // React requires a unique key for each visual element within a list of components
@@ -101,7 +101,8 @@ export default function BlogPage() {
             committed to helping you succeed!
           </p>
         </div>
-        <div id="mentor-call-to-action">
+        <div className={role === "student" ? "visually-hidden" : ""}
+             id="mentor-call-to-action">
           <h2>Mentors</h2>
           <p>Welcome mentors!</p>
           <p>Click this button to contribute your experiences!</p>
