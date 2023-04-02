@@ -14,6 +14,12 @@ export interface getBlogPostsResponse {
   data?: BlogPostData[];
 }
 
+function isBlogPostPropsValid(title: string, content: string) {
+  const isTitleValid = 0 < title.length && title.length <= 150;
+  const isContentValid = 0 < content.length && content.length <= 700;
+  return isTitleValid && isContentValid;
+}
+
 export async function blogHealthEndpoint(): Promise<boolean> {
   try {
     return (
@@ -29,6 +35,16 @@ export async function createBlogPost(
   title: string,
   content: string,
 ): Promise<createBlogPostResponse> {
+  // Double check content restrictions again to reduce API calls
+  title = title.trim();
+  content = content.trim();
+  if (!isBlogPostPropsValid(title, content)) {
+    return {
+      success: false,
+      message: "Blog post content invalid",
+    };
+  }
+
   try {
     const requestURL = ENV.API_DOMAIN + "/api/blog";
     const requestData = { title, content };
