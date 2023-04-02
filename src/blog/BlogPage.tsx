@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { BlogPostProps } from "./BlogPost.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { createBlogPost, getBlogPosts } from "./service/BlogService";
+import { createBlogPost, getBlogPosts, createBlogPostResponse } from "./service/BlogService";
 import "./blog.css";
 import BlogList from "./BlogList";
 import BlogPostCreator, { BlogPostInformationProps } from "./BlogPostCreator";
@@ -23,12 +23,10 @@ export default function BlogPage() {
 
   const { jwt } = useLoginContext();
 
-  const submitBlogPost = ({ title, content }: BlogPostInformationProps) => {
-    // TODO-JAROD: create an HTML call with onSuccess and onError and execute it 
-    console.info(`BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`);
-    createBlogPost(jwt, title, content).then((_) => console.log("done post!"));
-    getBlogPosts(jwt).then((_) => console.log("done get!"));
-    hideModal();
+  const submitBlogPost = async ({ title, content }: BlogPostInformationProps) => {
+    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: REMOVE TESTING SLEEP
+    const responseInfo: createBlogPostResponse =  await createBlogPost(jwt, title, content);
+    return responseInfo.success;
   };
 
   const retrieveBlogPosts = () => {
