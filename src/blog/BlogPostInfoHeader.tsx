@@ -34,14 +34,16 @@ function getTimeString(date: number): string {
 
 // Source: https://stackoverflow.com/questions/18679576/counting-words-in-string
 // Source: https://speechify.com/blog/reading-time/
+// Source: https://www.wyliecomm.com/2021/11/whats-the-best-length-of-a-word-online/
 function getReadTimeString(text: string): string {
   if (!text) {
     console.error("Blog post text is undefined");
     return "0 min read";
   }
 
-  const numOfWords: number = text.trim().split(/\s+/).length;
-  const readTimeInMinutes: number = numOfWords / 200;
+  const numOfWordsSource1Calc: number = text.trim().split(/\s+/).length;
+  const numOfWordsSource2Calc: number = text.trim().length / 4.7;
+  const readTimeInMinutes: number = ((numOfWordsSource1Calc / 200) + (numOfWordsSource2Calc / 200)) / 2;
 
   // If read time is 1+ minutes, display time in integer minutes
   if (readTimeInMinutes >= 1) {
