@@ -52,6 +52,10 @@
   justify-content: center;
 }
 
+.blog-list {
+  word-wrap: break-word;
+}
+
 .blog-list > hr {
   width: 98%;
   margin-left: auto;
