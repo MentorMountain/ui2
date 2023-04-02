@@ -1,13 +1,11 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
-import { blogHealthEndpoint } from "../../blog/service/BlogService";
-import { questionsHealthEndpoint } from "../../questions/service/QuestionsService";
+import { systemPreheat } from "../../common/System";
 import {
   LoginResponse,
   loginEndpoint,
-  loginHealthEndpoint,
   loginIntrospection,
-  signupEndpoint,
+  signupEndpoint
 } from "./LoginService";
 import { UserRole } from "./UserRole";
 
@@ -116,9 +114,7 @@ export function LoginContextProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    blogHealthEndpoint();
-    questionsHealthEndpoint();
-    loginHealthEndpoint();
+    systemPreheat();
 
     let cancelled = false;
     const update = async () => {
