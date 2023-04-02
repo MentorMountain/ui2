@@ -1,0 +1,9 @@
+export const defaultContentReplacements: { [key: string]: string; } = {
+    "<DEFAULT_LONG>": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel cursus orci. Nunc non fermentum ipsum. Etiam viverra vehicula felis. In vel erat neque. Morbi posuere ex ipsum, non rutrum ex pellentesque vel. Maecenas cursus sollicitudin erat a elementum. Aenean sodales augue quis mi fermentum mollis. Nullam tempus maximus risus, et ultrices enim ornare id. Curabitur dolor est, tempus ut ultrices vestibulum, vestibulum id magna. Curabitur feugiat mauris at imperdiet ultricies. Sed aliquam fringilla sapien, in mattis mauris elementum sed. Nunc ultrices sit amet nisi maximus molestie. Aliquam elementum purus ac neque egestas varius. Aliquam posuere molestie orci, placerat luctus magna augue.",
+    "<ERROR>": "too long Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel cursus orci. Nunc non fermentum ipsum. Etiam viverra vehicula felis. In vel erat neque. Morbi posuere ex ipsum, non rutrum ex pellentesque vel. Maecenas cursus sollicitudin erat a elementum. Aenean sodales augue quis mi fermentum mollis. Nullam tempus maximus risus, et ultrices enim ornare id. Curabitur dolor est, tempus ut ultrices vestibulum, vestibulum id magna. Curabitur feugiat mauris at imperdiet ultricies. Sed aliquam fringilla sapien, in mattis mauris elementum sed. Nunc ultrices sit amet nisi maximus molestie. Aliquam elementum purus ac neque egestas varius. Aliquam posuere molestie orci, placerat luctus magna augue.",
+};
+
+export const defaultTitleReplacements: { [key: string]: string; } = {
+    "<DEFAULT_LONG>": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel cursus orci. Nunc non fermentum ipsum. Etiam viverra vehicula felis. In vel erat ne",
+    "<ERROR>": "too long Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel cursus orci. Nunc non fermentum ipsum. Etiam viverra vehicula felis. In vel erat ne",
+};
