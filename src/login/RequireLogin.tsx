@@ -5,7 +5,6 @@ import { useLoginContext } from "./auth/LoginContextProvider";
 
 export function RequireLogin({ children }: { children: JSX.Element }) {
   const { username, isInitialized } = useLoginContext();
-  // const { username, isInitialized } = {"username":"jarodf", "isInitialized":true}; // TODO-JAROD: remove 
   const location = useLocation();
 
   if (!isInitialized) {

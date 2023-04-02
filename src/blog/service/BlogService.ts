@@ -5,7 +5,7 @@ import { BlogPostData } from "./BlogPostData";
 
 export interface createBlogPostResponse {
   success: boolean; // TODO-JAROD: 201    and    400                             and    401 are possible codes
-  message: string; // Question created    and    Invalid required information    and    Invalid user role
+  message?: string; // Question created    and    Invalid required information    and    Invalid user role
 }
 
 export interface getBlogPostsResponse {
@@ -26,20 +26,41 @@ export async function blogHealthEndpoint(): Promise<boolean> {
 
 // Create
 export async function createBlogPost(
+  jwt: string,
+  username: string,
   title: string,
   content: string,
 ): Promise<createBlogPostResponse> {
-  // user login context in here
-  return {
-    success: true,
-    message: "placeholder",
-  } as createBlogPostResponse;
+  try {
+    const user = {
+      "username": username,
+      "role": "mentor"
+    };
+    const response = await axios.post(
+      ENV.API_DOMAIN + "/api/blog",
+      {
+        user,
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization: jwt
+        }
+      }
+    );
+
+    console.log(response);
+    return { success: false };
+  } catch (e) {
+    console.error(e);
+    return { success: false };
+  }
 }
 
 // Get
 export async function getBlogPosts(): Promise<getBlogPostsResponse> {
-  // no need for loing context
-
+  // might need login context
   return {
     success: true,
     message: "placeholder",
