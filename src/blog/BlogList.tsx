@@ -13,10 +13,12 @@ export default function BlogList({
       {
         blogList.map((blogPost) => (
           <BlogPost
+            key={blogPost.postID} // TODO-JAROD: Add support for local cache
             title={blogPost.title}
             content={blogPost.content}
-            authorUsername={blogPost.authorUsername}
-            creationTime={blogPost.creationTime}
+            authorID={blogPost.authorID}
+            date={blogPost.date}
+            postID={blogPost.postID}
           />
         )) 
       }

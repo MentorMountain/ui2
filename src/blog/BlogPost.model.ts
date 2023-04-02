@@ -1,7 +1,7 @@
 export interface BlogPostProps {
+  postID?: string;
+  authorID: string;
+  date: number;
   title: string;
   content: string;
-  authorUsername: string;
-  creationTime: number;
-  postID?: string; // TODO-JAROD: Do we need it?
 }

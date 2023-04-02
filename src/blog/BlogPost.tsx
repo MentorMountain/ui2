@@ -11,11 +11,11 @@ function calcTextReadTimeInMinutes(text: string): number {
 }
 
 export default function BlogPost({
+    postID,
+    authorID,
+    date,
     title,
     content,
-    authorUsername,
-    creationTime,
-    postID,
 }: BlogPostProps) {
   return (
     <article>
@@ -26,10 +26,10 @@ export default function BlogPost({
                width="50px"
                height="50px"/>
         <div>
-          <p className="author-name">{authorUsername}</p>
+          <p className="author-name">{authorID}</p>
           <p className="post-info">
-            {new Date(creationTime).toLocaleDateString("en-CA")} <span className="bullet-point">•</span>&nbsp;
-            {new Date(creationTime).toLocaleTimeString("en-CA")} <span className="bullet-point">•</span>&nbsp;
+            {new Date(date).toLocaleDateString("en-CA")} <span className="bullet-point">•</span>&nbsp;
+            {new Date(date).toLocaleTimeString("en-CA")} <span className="bullet-point">•</span>&nbsp;
             {calcTextReadTimeInMinutes(content)} min read <span className="bullet-point">•</span>&nbsp;
             {postID ? postID : "NEW POST! (Badge)"}
           </p>
