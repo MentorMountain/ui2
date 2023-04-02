@@ -39,6 +39,7 @@ export default function BlogPostCreator({
     setIsContentValid(true);
     setTitle(DEFAULT_TEXT);
     setContent(DEFAULT_TEXT);
+    setShowToast(false);
     onShow();
   };
 
@@ -50,6 +51,7 @@ export default function BlogPostCreator({
 
   const submitPost = () => {
     if (checkTitleValidity(title) && checkContentValidity(content)) {
+      setShowToast(false);
       setIsRequestProcessing(true);
       onSubmit({
         title: title.trim(),
