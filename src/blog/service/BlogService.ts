@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import ENV from "../../env";
 
 import { BlogPostData } from "./BlogPostData";
@@ -46,6 +46,16 @@ export async function createBlogPost(
           success: true,
           message: "Question created",
         };
+      default: // Unknown API error
+        return { success: false };
+    }
+  } catch (e) {
+    console.error(e);
+    if (!(e instanceof AxiosError) || !e.response) { // Unknown request error
+      return { success: false };
+    }
+
+    switch (e.response.request.status) {
       case 400:
         return {
           success: false,
@@ -54,19 +64,16 @@ export async function createBlogPost(
       case 401:
         return {
           success: false,
-          message: "Invalid login credentials",
+          message: "User is not logged in",
         };
       case 403:
         return {
           success: false,
-          message: "Invalid user role",
+          message: "User is not a mentor",
         };
-      default: // Unknown error
+      default: // Unknown API error
         return { success: false };
     }
-  } catch (e) {
-    console.error(e);
-    return { success: false };
   }
 }
 
@@ -88,6 +95,16 @@ export async function getBlogPosts(jwt: string): Promise<getBlogPostsResponse> {
           message: "All blog posts",
           data: response.data,
         };
+      default: // Unknown error
+        return { success: false };
+    }
+  } catch (e) {
+    console.error(e);
+    if (!(e instanceof AxiosError) || !e.response) { // Unknown request error
+      return { success: false };
+    }
+
+    switch (e.response.request.status) {
       case 400:
         return {
           success: false,
@@ -98,11 +115,8 @@ export async function getBlogPosts(jwt: string): Promise<getBlogPostsResponse> {
           success: false,
           message: "Invalid login credentials",
         };
-      default: // Unknown error
+      default: // Unknown API error
         return { success: false };
     }
-  } catch (e) {
-    console.error(e);
-    return { success: false };
   }
 }
