@@ -110,6 +110,7 @@ export default function BlogPostCreator({
           <Form.Group className="mb-3" controlId="blogForm.content">
             <Form.Label>Content</Form.Label>
             <Form.Control
+              style={{maxHeight: "225px"}}
               as="textarea"
               rows={5}
               isInvalid={!isContentValid}
