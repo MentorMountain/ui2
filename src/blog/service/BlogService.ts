@@ -51,6 +51,11 @@ export async function createBlogPost(
           success: false,
           message: "Invalid required information",
         };
+      case 401:
+        return {
+          success: false,
+          message: "Invalid login credentials",
+        };
       case 403:
         return {
           success: false,
@@ -87,6 +92,11 @@ export async function getBlogPosts(jwt: string): Promise<getBlogPostsResponse> {
         return {
           success: false,
           message: "Invalid request",
+        };
+      case 401:
+        return {
+          success: false,
+          message: "Invalid login credentials",
         };
       default: // Unknown error
         return { success: false };
