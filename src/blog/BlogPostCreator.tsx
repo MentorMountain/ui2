@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Form, Modal, Spinner, Toast } from "react-bootstrap";
 import { createBlogPostResponse } from "./service/BlogService";
-import { defaultContentReplacements, defaultTitleReplacements } from "./defaultText";
+import { defaultTitleReplacements, defaultContentReplacements } from "./defaultText";
 
 export interface BlogPostInformationProps {
   title: string;
@@ -18,7 +18,12 @@ interface BlogPostCreatorProps {
 const DEFAULT_TEXT = "";
 
 // Replace instances of <DEFAULT_LONG>, <ERROR>, etc... with appropriate text
-function replaceDefaultText(title: string, content: string): [ string, string ] {
+async function replaceDefaultText(title: string, content: string): Promise<[ string, string ]> {
+  // If error is in any text, we sleep in order to demo the loading animation 
+  if (title.includes("<ERROR>") || content.includes("<ERROR>")) {
+    await new Promise(r => setTimeout(r, 2000)); // TODO-JAROD: SLEEP FOR DEMO PURPOSES
+  }
+
   // Replace keyword instances inside title
   Object.entries(defaultTitleReplacements)
         .forEach(([keyword, defaultText]) => (title = title.replace(keyword, defaultText)));
@@ -63,16 +68,17 @@ export default function BlogPostCreator({
     onHide();
   };
 
-  const submitPost = () => {
+  const submitPost = async () => {
     if (checkTitleValidity(title) && checkContentValidity(content)) {
       let submittedTitle: string = title.trim();
       let submittedContent: string = content.trim();
       
-      // Default text replacement handling
-      [ submittedTitle, submittedContent ] = replaceDefaultText(submittedTitle, submittedContent);
-
       setShowToast(false);
       setIsRequestProcessing(true);
+      
+      // Default text replacement handling
+      [ submittedTitle, submittedContent ] = await replaceDefaultText(submittedTitle, submittedContent);
+
       onSubmit({
         title: submittedTitle,
         content: submittedContent,
