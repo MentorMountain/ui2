@@ -1,5 +1,5 @@
 import { Question } from "./Questions.model";
-import BlogPost from "./BlogPost";
+import QuestionPost from "./QuestionPost";
 
 interface BlogListProps {
   questionList: Question[];
@@ -12,7 +12,7 @@ export default function QuestionList({
     <div>
       {
         questionList.map((blogPost) => (
-          <BlogPost
+          <QuestionPost
             key={blogPost.id} // TODO-JAROD: Add support for local cache
             title={blogPost.title}
             content={blogPost.content}

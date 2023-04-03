@@ -1,7 +1,8 @@
 import Image from 'react-bootstrap/Image'
 
 import { Question } from "./Questions.model";
-import profilePicture from './placeholderProfilePicture.png';
+import profilePicture from '../img/placeholderProfilePicture.png';
+import { Button } from 'react-bootstrap';
 
 // Source: https://stackoverflow.com/questions/18679576/counting-words-in-string
 // Source: https://speechify.com/blog/reading-time/
@@ -15,7 +16,7 @@ function calcTextReadTimeInMinutes(text: string): number {
   }
 }
 
-export default function BlogPost({
+export default function QuestionPost({
     id,
     authorID,
     date,
@@ -42,8 +43,10 @@ export default function BlogPost({
       </header>
       
       <section>
-        <h2>{title}</h2>
-        <p>{content}</p>
+        <h2>Q: {title}</h2>
+      </section>
+      <section>
+        <Button variant="dark">View Question</Button>
       </section>
     </article>
   );
