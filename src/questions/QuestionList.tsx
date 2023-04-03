@@ -13,7 +13,7 @@ export default function QuestionList({
   return (
     <div>
       {questionList.map((question, i) => (
-        <QuestionPost question={question} showQuestion={showQuestion} key={i} id={i+1} />
+        <QuestionPost question={question} showQuestion={showQuestion} key={i} id={(i+1).toString()} />
       ))}
     </div>
   );

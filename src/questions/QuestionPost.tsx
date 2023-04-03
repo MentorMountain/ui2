@@ -16,7 +16,7 @@ function calcTextReadTimeInMinutes(text: string): number {
 }
 
 interface QuestionPostProps {
-  id: number,
+  id: string,
   question: Question;
   showQuestion: (question: Question) => void;
 }

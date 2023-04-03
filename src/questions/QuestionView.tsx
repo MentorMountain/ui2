@@ -76,7 +76,7 @@ export default function QuestionView({
                 {/* <p>TODO MENTOR ONLY ACTION</p> */}
                 <Form>
                   <Form.Group className="mb-3" controlId="blogForm.content">
-                    <Form.Label>Response Message</Form.Label>
+                    <Form.Label>Mentors like you are free to add a Response Message below:</Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={5}
@@ -85,17 +85,12 @@ export default function QuestionView({
                     />
                   </Form.Group>
                 </Form>
-                <Modal.Footer>
-        <Button variant="secondary" onClick={hideModal}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          disabled={ !checkMessageValidity(message)}
-          onClick={submitPost}>
-          Submit
-        </Button>
-      </Modal.Footer>
+                <Button
+                  variant="primary"
+                  disabled={ !checkMessageValidity(message)}
+                  onClick={submitPost}>
+                  Submit
+                </Button>
               </>
       )}
     </Modal.Body>
