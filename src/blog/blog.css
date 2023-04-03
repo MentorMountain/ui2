@@ -131,7 +131,7 @@ article .bullet-point {
 
 article > section {
   padding: 5px 10px;
-  font-family: "Scope One", "Times New Roman", serif;
+  /* font-family: "Scope One", "Times New Roman", serif; */
 }
 
 article > section > h2 {
