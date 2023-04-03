@@ -26,8 +26,14 @@ export default function QuestionsPage() {
 
   const { jwt, role } = useLoginContext();
 
-  const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(
-    undefined
+  const [currentQuestion, setCurrentQuestion] = useState<Question>(
+    {
+      id: "",
+      authorID: "",
+      date: 0,
+      title: "",
+      content: ""
+    }
   );
 
   const submitQuestion = ({ title, content }: QuestionInfoProps) => {
