@@ -30,7 +30,7 @@ export default function QuestionList({
       </div>
       <hr className={(questionList.length < 1 && !shouldShowSpinner)? "" : "visually-hidden"}></hr>
       <p className={(questionList.length < 1 && !shouldShowSpinner && role === "student") ? "empty-list-text" : "visually-hidden"}>
-        Hello {username} ! Any blog posts you create will show up down here!!<br/>
+        Hello {username} ! Any questions you create will show up down here!!<br/>
         Get started helping students by hitting the button above to contribute some experiences! 👍
         
       </p>

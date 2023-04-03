@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
 import { Question, QuestionResponse } from "./Questions.model";
@@ -38,16 +38,23 @@ export default function QuestionView({
   console.log("THIS POSTS ID IS: " + id);
 
   const retrieveResponsesByQuestionId = useCallback(async () => {
-    getResponsesToQuestion(jwt, id!).then((responseInfo) => {
-      if (!responseInfo) {
-        setQuestionsResponses([]);
-      }
-      if (responseInfo.success && responseInfo.responses !== undefined) {
-        setQuestionsResponses(responseInfo.responses);
-      }
-    });
+    console.log("currentQuestion:" + currentQuestion);
+    if (currentQuestion != undefined) {
+      getResponsesToQuestion(jwt, id!).then((responseInfo) => {
+        if (!responseInfo) {
+          setQuestionsResponses([]);
+        }
+        if (responseInfo.success && responseInfo.responses !== undefined) {
+          setQuestionsResponses(responseInfo.responses);
+        }
+      });
+    }
   }, [jwt, currentQuestion]);
-  retrieveResponsesByQuestionId();
+
+  useEffect(() => {
+    retrieveResponsesByQuestionId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!currentQuestion.id) {
     return <></>;
@@ -60,8 +67,11 @@ export default function QuestionView({
 
   const submitPost = () => {
     if (checkMessageValidity(message)) {
-      postResponseToQuestion(jwt, currentQuestion.id || "", username, message);
+      postResponseToQuestion(jwt, currentQuestion.id || "", username, message).then(() => {
+        retrieveResponsesByQuestionId();
+      });
     }
+    
   };
 
   const checkMessageValidity = (message: string): boolean => {
@@ -109,6 +119,7 @@ export default function QuestionView({
         </Button>
         <QuestionResponsesList
           questionResponses={questionResponses}
+          
         />
       </Modal.Footer>
               </>

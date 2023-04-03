@@ -116,12 +116,14 @@ export default function QuestionsPage() {
         questionList={questions}
         showQuestion={(question: Question) => {setCurrentQuestion(question); setShowQuestionView(true)}}
       />
-      <QuestionView
-        show={showQuestionView}
-        onHide={hideQuestionViewModal}
-        onShow={showQuestionViewModal}
-        currentQuestion={currentQuestion}
-      />
+      {currentQuestion.id !== "" && 
+        <QuestionView
+          show={showQuestionView}
+          onHide={hideQuestionViewModal}
+          onShow={showQuestionViewModal}
+          currentQuestion={currentQuestion}
+        />
+      }
     </div>
   );
 }

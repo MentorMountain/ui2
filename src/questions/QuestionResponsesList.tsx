@@ -28,13 +28,13 @@ export default function BlogList({
         />
       </div>  */}
       {
-        questionResponses.map((questionResponse) => (
+        questionResponses.map((questionResponse, i) => (
           <QuestionResponsePost
             key={questionResponse.id}
             message={questionResponse.message}
             authorID={questionResponse.authorID}
             date={questionResponse.date}
-            id={questionResponse.id}
+            id={(i+1).toString()}
             questionID={questionResponse.questionID}
           />
         )) 
