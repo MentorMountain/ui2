@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { Question } from "./Questions.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
 import QuestionCreator, { BlogPostInformationProps } from "./QuestionCreator";
@@ -11,15 +11,20 @@ import {
   getQuestionIDs,
   postQuestion,
 } from "./service/QuestionsService";
+import QuestionView from "./QuestionView";
 
 export default function QuestionsPage() {
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
   const [questionIDs, setQuestionIDs] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const showModal = () => setShowPostCreator(true);
-  const hideModal = () => setShowPostCreator(false);
+  const showQuestionCreatorModal = () => setShowPostCreator(true);
+  const hideQuestionCreatorModal = () => setShowPostCreator(false);
 
   const { jwt, role } = useLoginContext();
+
+  const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>(
+    undefined
+  );
 
   const submitQuestion = ({ title, content }: BlogPostInformationProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it
@@ -31,7 +36,7 @@ export default function QuestionsPage() {
     );
     getQuestionIDs(jwt).then((_) => console.log("done get of IDs!"));
     retrieveQuestions().then((_) => console.log("done get of questions!"));
-    hideModal();
+    hideQuestionCreatorModal();
   };
 
   const retrieveQuestionsById = useCallback(
@@ -87,17 +92,24 @@ export default function QuestionsPage() {
     <div className="blog-container">
       {role === "student" && (
         <>
-          <Button onClick={showModal}>Create Question</Button>
+          <Button onClick={showQuestionCreatorModal}>Create Question</Button>
         </>
       )}
 
       <QuestionCreator
         show={showPostCreator}
-        onShow={showModal}
+        onShow={showQuestionCreatorModal}
         onSubmit={submitQuestion}
-        onHide={hideModal}
+        onHide={hideQuestionCreatorModal}
       />
-      <QuestionList questionList={questions} />
+      <QuestionList
+        questionList={questions}
+        showQuestion={setCurrentQuestion}
+      />
+      <QuestionView
+        currentQuestion={currentQuestion}
+        showQuestion={setCurrentQuestion}
+      />
     </div>
   );
 }
