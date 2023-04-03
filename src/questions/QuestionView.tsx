@@ -47,9 +47,11 @@ export default function QuestionView({
         }
         if (responseInfo.success && responseInfo.responses !== undefined) {
           //setQuestionsResponses(responseInfo.responses);
-          const sortedQuestionResponses = responseInfo.responses.sort((q1, q2) => {
-            return q2.date - q1.date;
-          });
+          const sortedQuestionResponses = responseInfo.responses.sort(
+            (q1, q2) => {
+              return q2.date - q1.date;
+            }
+          );
           setQuestionsResponses(sortedQuestionResponses);
         }
       });
@@ -79,6 +81,7 @@ export default function QuestionView({
         message
       ).then(() => {
         retrieveResponsesByQuestionId();
+        updateMessage("");
       });
     }
   };
