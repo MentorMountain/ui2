@@ -118,7 +118,10 @@ export default function QuestionView({
               <>
                 <Card className="p-3 mt-3">
                   <Form>
-                    <Form.Group className="mb-3" controlId="questionResponseForm.content">
+                    <Form.Group
+                      className="mb-3"
+                      controlId="questionResponseForm.content"
+                    >
                       <Form.Control
                         as="textarea"
                         rows={6}
@@ -136,10 +139,9 @@ export default function QuestionView({
                     Submit
                   </Button>
                 </Card>
-
-                <QuestionResponsesList questionResponses={questionResponses} />
               </>
             )}
+            <QuestionResponsesList questionResponses={questionResponses} />
           </Modal.Body>
         </>
       )}
