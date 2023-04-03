@@ -6,6 +6,7 @@ import {
   getResponsesToQuestion,
   postResponseToQuestion,
 } from "./service/QuestionsService";
+import QuestionResponsesList from "./QuestionResponsesList";
 
 interface QuestionViewProps {
   show: boolean;
@@ -100,17 +101,16 @@ export default function QuestionView({
                   </Form.Group>
                 </Form>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={hideModal}>
-                    Close
-                  </Button>
-                  <Button
-                    variant="primary"
-                    disabled={!checkMessageValidity(message)}
-                    onClick={submitPost}
-                  >
-                    Submit
-                  </Button>
-                </Modal.Footer>
+        <Button
+          variant="primary"
+          disabled={ !checkMessageValidity(message)}
+          onClick={submitPost}>
+          Submit
+        </Button>
+        <QuestionResponsesList
+          questionResponses={questionResponses}
+        />
+      </Modal.Footer>
               </>
             )}
           </Modal.Body>
