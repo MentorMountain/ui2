@@ -66,8 +66,8 @@ export default function QuestionsPage() {
       let result2: Question[] = result.map((res) => res.question as Question);
       //if (typeof result2 !== undefined){
 
-      const sortedQuestions = result2.sort((a, b) => {
-        return b.date - a.date;
+      const sortedQuestions = result2.sort((q1, q2) => {
+        return q2.date - q1.date;
       });
 
       setQuestions(sortedQuestions);

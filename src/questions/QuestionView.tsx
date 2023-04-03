@@ -47,8 +47,8 @@ export default function QuestionView({
         }
         if (responseInfo.success && responseInfo.responses !== undefined) {
           //setQuestionsResponses(responseInfo.responses);
-          const sortedQuestionResponses = responseInfo.responses.sort((a, b) => {
-            return b.date - a.date;
+          const sortedQuestionResponses = responseInfo.responses.sort((q1, q2) => {
+            return q2.date - q1.date;
           });
           setQuestionsResponses(sortedQuestionResponses);
         }
