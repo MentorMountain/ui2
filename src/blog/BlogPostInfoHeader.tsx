@@ -1,6 +1,6 @@
 import Image from 'react-bootstrap/Image'
 
-import profilePicture from './placeholderProfilePicture.png';
+import profilePicture from '../common/img/placeholderProfilePicture.png';
 import { Badge } from 'react-bootstrap';
 import { useLoginContext } from '../login/auth/LoginContextProvider';
 
