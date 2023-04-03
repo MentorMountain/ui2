@@ -18,6 +18,7 @@ export default function QuestionsPage() {
   const [showQuestionView, setShowQuestionView] = useState<boolean>(false);
   const [questionIDs, setQuestionIDs] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [isGettingQuestions, setIsGettingQuestions] = useState<boolean>(false);
   const showQuestionCreatorModal = () => setShowPostCreator(true);
   const hideQuestionCreatorModal = () => setShowPostCreator(false);
   const showQuestionViewModal = () => setShowQuestionView(true);
@@ -41,7 +42,6 @@ export default function QuestionsPage() {
     retrieveQuestions().then((_) => console.log("done get of questions!"));
     hideQuestionCreatorModal();
   };
-
   const retrieveQuestionsById = useCallback(
     async (questionIds: string[]) => {
       console.log("now entering the test");
@@ -66,6 +66,7 @@ export default function QuestionsPage() {
 
   //on page load, get all the question ids, then use them to get all the questions so you can display the question titles, and a clickable button to show more info+responses.
   const retrieveQuestions = useCallback(async () => {
+    setIsGettingQuestions(true);
     getQuestionIDs(jwt).then((responseInfo) => {
       if (responseInfo.questionIDs) {
         setQuestions([]); //clear the array before pushing the questions
@@ -79,10 +80,10 @@ export default function QuestionsPage() {
         //   questions.push(getQuestion(jwt,questionID));
         // })
       }
-
       if (responseInfo.success && responseInfo.questionIDs !== undefined) {
         setQuestionIDs(responseInfo.questionIDs);
       }
+      setIsGettingQuestions(false);
     });
   }, [jwt, retrieveQuestionsById]);
 
@@ -106,6 +107,7 @@ export default function QuestionsPage() {
         onHide={hideQuestionCreatorModal}
       />
       <QuestionList
+        shouldShowSpinner={isGettingQuestions}
         questionList={questions}
         showQuestion={setCurrentQuestion}
       />
