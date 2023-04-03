@@ -1,0 +1,145 @@
+/* Speed impacts of use of @import here are appropriate for the usecase:
+   Source: https://stackoverflow.com/questions/6721766/google-web-fonts */
+@import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
+
+.blog-container {
+  margin: 0px auto;
+  width: 800px;
+}
+
+.blog-container > h1 {
+  text-align: center;
+}
+
+.blog-container > hr {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#blog-blurb {
+  display: flex;
+}
+
+#blog-blurb > #blog-welcome-blurb {
+  flex: 1 1 auto;
+  padding-right: 15px;
+}
+
+#blog-blurb > #mentor-call-to-action {
+  flex: 1 0 auto;
+  width: 22%;
+  border-left: 1px solid lightgray;
+}
+
+#blog-blurb > #mentor-call-to-action > #mentor-cta-button {
+  display: flex;
+  justify-content: center;
+}
+
+#blog-blurb h2 {
+  text-align: center;
+}
+
+#blog-blurb > #mentor-call-to-action > * {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.blog-list-spinner-container {
+  display: flex;
+  justify-content: center;
+}
+
+.blog-list {
+  word-wrap: break-word;
+}
+
+.blog-list > hr {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.blog-list > .empty-list-text {
+  text-align: center;
+}
+
+article {
+  margin: 15px 0px;
+}
+
+article > hr {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Blog Post Header */
+article > header {
+  display: flex;
+  width: 100%;
+  padding: 15px 15px 15px 0px;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Blog User Profile Picture */
+article > header > *:first-child {
+  flex: 0 1 auto;
+  margin: 0px 15px;
+}
+
+/* Blog Author Name & Post Info */
+article > header > *:last-child {
+  flex: 1 1 auto;
+}
+
+article > header > div > p > .author-badge-parent {
+  font-size: 14px;
+}
+
+article > header > div > p > .author-badge-parent > .badge {
+  position: relative;
+  left: 5px;
+  top: -1.5px;
+}
+
+article > header > div > p > .cache-badge-parent {
+  font-size: 11.5px;
+}
+
+article > header > div > p > .cache-badge-parent > .badge {
+  position: relative;
+  top: -1.5px;
+}
+
+article .author-name {
+  margin: 3px 0px;
+  font-size: 16px;
+}
+
+article .post-info {
+  margin: 0px;
+  color: gray;
+  font-size: 13px;
+}
+
+article .bullet-point {
+  font-size: 11px;
+}
+
+article > section {
+  padding: 5px 10px;
+  font-family: "Scope One", "Times New Roman", serif;
+}
+
+article > section > h2 {
+  margin: 7px 0px;
+}
+
+article > section > p {
+  font-size: 18px;
+  margin: 7px 0px 10px;
+  white-space: pre-wrap;
+}
