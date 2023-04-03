@@ -5,7 +5,7 @@ import QuestionCreator, { QuestionInfoProps } from "./QuestionCreator";
 import QuestionList from "./QuestionList";
 import QuestionView from "./QuestionView";
 import { Question } from "./Questions.model";
-import "./blog.css";
+import "./questions.css";
 import {
   GetQuestion,
   getQuestion,
@@ -104,12 +104,16 @@ export default function QuestionsPage() {
 
   return (
     <div className="blog-container">
+      <h1>
+        Student Questions
+      </h1>
       {role === "student" && (
         <>
           <Button onClick={showQuestionCreatorModal}>Create Question</Button>
         </>
       )}
 
+        
       <QuestionCreator
         show={showPostCreator}
         onShow={showQuestionCreatorModal}

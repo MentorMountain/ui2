@@ -13,11 +13,8 @@ article > hr {
 }
 
 /* Blog Post Header */
-article > header {
-  display: flex;
-  width: 100%;
-  padding: 15px 15px 15px 0px;
-  /* font-family: "Open Sans", sans-serif; */
+.blogPostHeader {
+  font-family: "Open Sans", sans-serif;
 }
 
 /* Blog User Profile Picture */
@@ -46,7 +43,7 @@ article .bullet-point {
   font-size: 11px;
 }
 
-article > section {
+.questionContent {
   padding: 5px 10px;
   /* font-family: "Scope One", "Times New Roman", serif; */
 }

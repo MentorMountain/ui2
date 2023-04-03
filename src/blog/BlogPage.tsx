@@ -76,7 +76,7 @@ export default function BlogPage() {
 
   return (
     <div className="blog-container">
-      <h1>Mentor Mountain Blogs</h1>
+      <h1>Mentor Blogs</h1>
       <hr></hr>
       <div id="blog-blurb" className="container">
         <div id="blog-welcome-blurb">
