@@ -99,14 +99,12 @@ export default function QuestionView({
                 {/* <p>TODO MENTOR ONLY ACTION</p> */}
                 <Form>
                   <Form.Group className="mb-3" controlId="blogForm.content">
-                    <Form.Label>
-                      Mentors like you are free to add a Response Message below:
-                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={5}
                       isInvalid={!isMessageValid}
                       onChange={(e) => updateMessage(e.target.value)}
+                      placeholder="Your response"
                     />
                   </Form.Group>
                 </Form>
