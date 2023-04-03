@@ -1,61 +1,56 @@
-import { Question, QuestionResponse } from "./Questions.model";
-import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import {getResponsesToQuestion, postResponseToQuestion} from "./service/QuestionsService";
+import { useLoginContext } from "../login/auth/LoginContextProvider";
+import { Question, QuestionResponse } from "./Questions.model";
+import {
+  getResponsesToQuestion,
+  postResponseToQuestion,
+} from "./service/QuestionsService";
 
 interface QuestionViewProps {
   show: boolean;
   onShow: VoidFunction;
-  onHide: VoidFunction;//(isShowing: boolean) => void;
+  onHide: VoidFunction; //(isShowing: boolean) => void;
   //onSubmit: (props: string) => void;
   currentQuestion: Question;
-  showQuestion: (question: Question | undefined) => void;
 }
 const DEFAULT_TEXT = "";
 
 export default function QuestionView({
   onHide,
   currentQuestion,
-  showQuestion,
+  show
 }: QuestionViewProps) {
   const closeQuestion = () => {
-    showQuestion(undefined);
     onHide();
-  }
+  };
   const { role } = useLoginContext();
 
   const [message, setMessage] = useState<string>(DEFAULT_TEXT);
   const [isMessageValid, setIsMessageValid] = useState<boolean>(true);
-  const [questionResponses, setQuestionsResponses] = useState<QuestionResponse[]>([]);
+  const [questionResponses, setQuestionsResponses] = useState<
+    QuestionResponse[]
+  >([]);
   const { jwt, username } = useLoginContext();
-
-  if ()
 
   const { authorID, content, date, title, id } = currentQuestion;
   console.log("THIS POSTS ID IS: " + id);
 
-  const retrieveResponsesByQuestionId = useCallback(
-    async () => {
-        getResponsesToQuestion(jwt, id).then((responseInfo) => {
-          if (!responseInfo) {
-            setQuestionsResponses([]);
-          }
-          if (responseInfo.success && responseInfo.responses !== undefined) {
-            setQuestionsResponses(responseInfo.responses);
-          }
-          
-        })
-    },
-    [jwt, currentQuestion]
-  );
+  const retrieveResponsesByQuestionId = useCallback(async () => {
+    getResponsesToQuestion(jwt, id!).then((responseInfo) => {
+      if (!responseInfo) {
+        setQuestionsResponses([]);
+      }
+      if (responseInfo.success && responseInfo.responses !== undefined) {
+        setQuestionsResponses(responseInfo.responses);
+      }
+    });
+  }, [jwt, currentQuestion]);
   retrieveResponsesByQuestionId();
 
-  if (currentQuestion === undefined) {
+  if (!currentQuestion.id) {
     return <></>;
   }
-
-  
 
   const updateMessage = (text: string) => {
     setMessage(text);
@@ -64,12 +59,7 @@ export default function QuestionView({
 
   const submitPost = () => {
     if (checkMessageValidity(message)) {
-      postResponseToQuestion(
-        jwt,
-        currentQuestion.id || "",
-        username,
-        message,
-      )
+      postResponseToQuestion(jwt, currentQuestion.id || "", username, message);
     }
   };
 
@@ -85,7 +75,7 @@ export default function QuestionView({
   };
 
   return (
-    <Modal show={currentQuestion !== undefined} onHide={hideModal}>
+    <Modal show={show} onHide={hideModal}>
       {currentQuestion !== undefined && (
         <>
           <Modal.Header closeButton onHide={closeQuestion}>
@@ -98,7 +88,9 @@ export default function QuestionView({
                 {/* <p>TODO MENTOR ONLY ACTION</p> */}
                 <Form>
                   <Form.Group className="mb-3" controlId="blogForm.content">
-                    <Form.Label>Mentors like you are free to add a Response Message below:</Form.Label>
+                    <Form.Label>
+                      Mentors like you are free to add a Response Message below:
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       rows={5}
@@ -108,23 +100,22 @@ export default function QuestionView({
                   </Form.Group>
                 </Form>
                 <Modal.Footer>
-        <Button variant="secondary" onClick={hideModal}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          disabled={ !checkMessageValidity(message)}
-          onClick={submitPost}>
-          Submit
-        </Button>
-        
-      </Modal.Footer>
+                  <Button variant="secondary" onClick={hideModal}>
+                    Close
+                  </Button>
+                  <Button
+                    variant="primary"
+                    disabled={!checkMessageValidity(message)}
+                    onClick={submitPost}
+                  >
+                    Submit
+                  </Button>
+                </Modal.Footer>
               </>
-      )}
-    </Modal.Body>
+            )}
+          </Modal.Body>
         </>
-      )
-}
-    </Modal >
+      )}
+    </Modal>
   );
 }

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import { Question } from "./Questions.model";
+import { Button } from "react-bootstrap";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
 import QuestionCreator, { QuestionInfoProps } from "./QuestionCreator";
 import QuestionList from "./QuestionList";
+import QuestionView from "./QuestionView";
+import { Question } from "./Questions.model";
 import "./blog.css";
 import {
   GetQuestion,
@@ -11,9 +12,15 @@ import {
   getQuestionIDs,
   postQuestion,
 } from "./service/QuestionsService";
-import QuestionView from "./QuestionView";
 
 export default function QuestionsPage() {
+  const DEFAULT_QUESTION = {
+    id: "",
+    authorID: "",
+    date: 0,
+    title: "",
+    content: "",
+  };
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
   const [showQuestionView, setShowQuestionView] = useState<boolean>(false);
   const [questionIDs, setQuestionIDs] = useState<string[]>([]);
@@ -22,19 +29,11 @@ export default function QuestionsPage() {
   const showQuestionCreatorModal = () => setShowPostCreator(true);
   const hideQuestionCreatorModal = () => setShowPostCreator(false);
   const showQuestionViewModal = () => setShowQuestionView(true);
-  const hideQuestionViewModal = () => setShowQuestionView(false);
+  const hideQuestionViewModal = () => {setShowQuestionView(false); setCurrentQuestion(DEFAULT_QUESTION)};
 
   const { jwt, role } = useLoginContext();
 
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(
-    {
-      id: "",
-      authorID: "",
-      date: 0,
-      title: "",
-      content: ""
-    }
-  );
+  const [currentQuestion, setCurrentQuestion] = useState<Question>(DEFAULT_QUESTION);
 
   const submitQuestion = ({ title, content }: QuestionInfoProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it
@@ -115,14 +114,13 @@ export default function QuestionsPage() {
       <QuestionList
         shouldShowSpinner={isGettingQuestions}
         questionList={questions}
-        showQuestion={setCurrentQuestion}
+        showQuestion={(question: Question) => {setCurrentQuestion(question); setShowQuestionView(true)}}
       />
       <QuestionView
         show={showQuestionView}
         onHide={hideQuestionViewModal}
         onShow={showQuestionViewModal}
         currentQuestion={currentQuestion}
-        showQuestion={setCurrentQuestion}
       />
     </div>
   );
