@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-export interface BlogPostInformationProps {
+export interface QuestionInfoProps {
   title: string;
   content: string;
 }
 
-interface BlogPostCreatorProps {
+interface QuestionCreatorProps {
   show: boolean;
   onShow: VoidFunction;
   onHide: VoidFunction;
-  onSubmit: (props: BlogPostInformationProps) => void;
+  onSubmit: (props: QuestionInfoProps) => void;
 }
 
 const DEFAULT_TEXT = "";
 
-export default function BlogPostCreator({
+export default function QuestionCreator({
   show, // TODO-JAROD: on-show to set isTitleValid and isContentValid to true
   onShow,
   onHide,
   onSubmit,
-}: BlogPostCreatorProps) {
+}: QuestionCreatorProps) {
   const [title, setTitle] = useState<string>(DEFAULT_TEXT);
   const [content, setContent] = useState<string>(DEFAULT_TEXT);
   const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
@@ -74,7 +74,7 @@ export default function BlogPostCreator({
   return (
     <Modal show={show} onShow={showModal} onHide={hideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Create Blog Post</Modal.Title>
+        <Modal.Title>Create Question Post</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>

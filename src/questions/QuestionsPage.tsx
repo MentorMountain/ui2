@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { Question } from "./Questions.model";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import QuestionCreator, { BlogPostInformationProps } from "./QuestionCreator";
+import QuestionCreator, { QuestionInfoProps } from "./QuestionCreator";
 import QuestionList from "./QuestionList";
 import "./blog.css";
 import {
@@ -26,7 +26,7 @@ export default function QuestionsPage() {
     undefined
   );
 
-  const submitQuestion = ({ title, content }: BlogPostInformationProps) => {
+  const submitQuestion = ({ title, content }: QuestionInfoProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it
     console.info(
       `BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`
