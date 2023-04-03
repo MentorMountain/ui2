@@ -4,7 +4,7 @@
 
 .blog-container {
   margin: 0px auto;
-  width: 800px;
+  width: 60vw;
 }
 
 .blog-container > h1 {
@@ -81,7 +81,7 @@ article > header {
   display: flex;
   width: 100%;
   padding: 15px 15px 15px 0px;
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
 }
 
 /* Blog User Profile Picture */
@@ -131,7 +131,7 @@ article .bullet-point {
 
 article > section {
   padding: 5px 10px;
-  font-family: "Scope One", "Times New Roman", serif;
+  /* font-family: "Scope One", "Times New Roman", serif; */
 }
 
 article > section > h2 {

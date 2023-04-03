@@ -17,8 +17,8 @@ export default function QuestionList({
   const { role, username } = useLoginContext();
   return (
     <div>
-    <hr className={shouldShowSpinner ? "" : "visually-hidden"}/>
-    <div className="blog-list-spinner-container">
+      <hr className={shouldShowSpinner ? "" : "visually-hidden"} />
+      <div className="blog-list-spinner-container">
         <Spinner
           className={shouldShowSpinner ? "" : "visually-hidden"}
           as="span"
@@ -28,19 +28,43 @@ export default function QuestionList({
           aria-hidden="true"
         />
       </div>
-      <hr className={(questionList.length < 1 && !shouldShowSpinner)? "" : "visually-hidden"}></hr>
-      <p className={(questionList.length < 1 && !shouldShowSpinner && role === "student") ? "empty-list-text" : "visually-hidden"}>
-        Hello {username} ! Any questions you create will show up down here!!<br/>
-        Get started helping students by hitting the button above to contribute some experiences! 👍
-        
-      </p>
-      <p className={(questionList.length < 1 && !shouldShowSpinner && role === "mentor") ? "empty-list-text" : "visually-hidden"}>
-        Hey Mentors! Seems like there's no questions at the moment<br/>
-        Check again a bit later after our students have had a chance to ask some questions! 🙂
-      </p>
-    
+      <hr
+        className={
+          questionList.length < 1 && !shouldShowSpinner ? "" : "visually-hidden"
+        }
+      ></hr>
+      <div
+        className={
+          questionList.length < 1 && !shouldShowSpinner && role === "student"
+            ? "empty-list-text"
+            : "visually-hidden"
+        }
+      >
+        <p>
+          Hello {username}! Any questions you create will show up down here!
+        </p>
+        Get started helping students by hitting the button above to contribute
+        some experiences! 👍
+      </div>
+      <div
+        className={
+          questionList.length < 1 && !shouldShowSpinner && role === "mentor"
+            ? "empty-list-text"
+            : "visually-hidden"
+        }
+      >
+        <p>Hey Mentors! Seems like there's no questions at the moment.</p>
+        Check again a bit later after our students have had a chance to ask some
+        questions! 🙂
+      </div>
+
       {questionList.map((question, i) => (
-        <QuestionPost question={question} showQuestion={showQuestion} key={i} id={(i+1).toString()} />
+        <QuestionPost
+          question={question}
+          showQuestion={showQuestion}
+          key={i}
+          id={(i + 1).toString()}
+        />
       ))}
     </div>
   );
