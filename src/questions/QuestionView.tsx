@@ -110,18 +110,18 @@ export default function QuestionView({
                     />
                   </Form.Group>
                 </Form>
-                <Modal.Footer>
+                <Modal.Footer className="justify-content">
         <Button
           variant="primary"
           disabled={ !checkMessageValidity(message)}
           onClick={submitPost}>
           Submit
         </Button>
+      </Modal.Footer>
         <QuestionResponsesList
           questionResponses={questionResponses}
           
         />
-      </Modal.Footer>
               </>
             )}
           </Modal.Body>

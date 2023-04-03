@@ -16,8 +16,7 @@ export default function QuestionResponsePost({
                           date={date}
                           content={message} />
       <section>
-        <h2>{authorID}</h2>
-        <p>{message}</p>
+        <h3>{message}</h3>
       </section>
     </article>
   );
