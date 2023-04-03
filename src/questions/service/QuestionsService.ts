@@ -128,6 +128,11 @@ export async function getQuestion(
 
     switch (response.status) {
       case 200:
+        let questionObject:Question = response.data;
+        if(response.data && response.data != ""){
+          questionObject.id = questionID;
+        }
+        
         return {
           success: true,
           message: "Question content successfully received",

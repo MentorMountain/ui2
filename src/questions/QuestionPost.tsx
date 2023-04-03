@@ -16,15 +16,17 @@ function calcTextReadTimeInMinutes(text: string): number {
 }
 
 interface QuestionPostProps {
+  id: number,
   question: Question;
   showQuestion: (question: Question) => void;
 }
 
 export default function QuestionPost({
+  id,
   question,
   showQuestion,
 }: QuestionPostProps) {
-  const { authorID, content, date, title, id } = question;
+  const { authorID, content, date, title } = question;
   return (
     <article>
       <hr></hr>

@@ -15,10 +15,13 @@ import QuestionView from "./QuestionView";
 
 export default function QuestionsPage() {
   const [showPostCreator, setShowPostCreator] = useState<boolean>(false);
+  const [showQuestionView, setShowQuestionView] = useState<boolean>(false);
   const [questionIDs, setQuestionIDs] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const showQuestionCreatorModal = () => setShowPostCreator(true);
   const hideQuestionCreatorModal = () => setShowPostCreator(false);
+  const showQuestionViewModal = () => setShowQuestionView(true);
+  const hideQuestionViewModal = () => setShowQuestionView(false);
 
   const { jwt, role } = useLoginContext();
 
@@ -107,6 +110,9 @@ export default function QuestionsPage() {
         showQuestion={setCurrentQuestion}
       />
       <QuestionView
+        show={showQuestionView}
+        onHide={hideQuestionViewModal}
+        onShow={showQuestionViewModal}
         currentQuestion={currentQuestion}
         showQuestion={setCurrentQuestion}
       />
