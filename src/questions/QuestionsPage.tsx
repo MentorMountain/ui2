@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { Question, QuestionResponse } from "./Questions.model";
 //import { Question, QuestionResponse } from "./service/question.ts";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { getResponsesToQuestion, postResponseToQuestion, getQuestion, getQuestionIDs, postQuestion } from "./service/QuestionsService";
+import { getResponsesToQuestion, postResponseToQuestion, getQuestion, getQuestionIDs, postQuestion, GetQuestion } from "./service/QuestionsService";
 import "./blog.css";
 import QuestionList from "./QuestionList";
 import QuestionCreator, { BlogPostInformationProps } from "./QuestionCreator";
@@ -91,11 +91,21 @@ export default function QuestionsPage() {
     console.log("now entering the test");
     console.log(questionIDs[0]);
     console.log(await getQuestion(jwt,questionIDs[0]));
-    let questionTest = JSON.parse(await getQuestion(jwt,questionIDs[0]));
-
-    let result = await Promise.all(questionIds.map(questionID => {getQuestion(jwt,questionID)}));//returns :Question[]
+    let promises:Promise<GetQuestion>[] = [];
+    questionIds.forEach(questionID => {
+              promises.push(getQuestion(jwt,questionID));
+          }
+    );
+    let result:GetQuestion[] = await Promise.all(promises);
     console.log(result);
-    return result;
+    let result2:(Question)[] = result.map(res => res.question as Question);
+    //if (typeof result2 !== undefined){
+      setQuestions(result2);
+    //}
+    // else{
+    //   setQuestions([]);
+    // }
+    
   }
 
   //on page load, get all the question ids, then use them to get all the questions so you can display the question titles, and a clickable button to show more info+responses.
@@ -103,7 +113,8 @@ export default function QuestionsPage() {
     getQuestionIDs(jwt).then((responseInfo) => {
       if (responseInfo.questionIDs){
         setQuestions([]);//clear the array before pushing the questions
-        retrieveQuestionsById(responseInfo.questionIDs)
+        let result = retrieveQuestionsById(responseInfo.questionIDs)
+       
         // .then(questions:Question[] => {
         //   setQuestions(questions);
         // })

@@ -104,7 +104,10 @@ export async function postQuestion(
     }
   } catch (e) {
     console.error(e);
-    return { success: false };
+    return {
+      success: false,
+      message: "Invalid required information",
+    };
   }
 }
 
@@ -153,7 +156,10 @@ export async function getQuestion(
     }
   } catch (e) {
     console.error(e);
-    return { success: false };
+    return {
+      success: false,
+      message: "Invalid required information",
+    };
   }
 }
 
@@ -191,7 +197,10 @@ export async function getQuestionIDs(jwt: string): Promise<getQuestionIDs> {
     }
   } catch (e) {
     console.error(e);
-    return { success: false };
+    return{
+      success: false,
+      message: "Invalid required information",
+    };
   }
 }
 
@@ -240,7 +249,10 @@ export async function postResponseToQuestion(
     }
   } catch (e) {
     console.error(e);
-    return { success: false };
+    return {
+      success: false,
+      message: "Invalid required information",
+    };
   }
 }
 
@@ -281,6 +293,9 @@ export async function getResponsesToQuestion(
     }
   } catch (e) {
     console.error(e);
-    return { success: false };
+    return {
+      success: false,
+      message: "Invalid required information",
+    };
   }
 }
