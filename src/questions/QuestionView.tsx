@@ -1,5 +1,6 @@
 import { Modal } from "react-bootstrap";
 import { Question } from "./Questions.model";
+import { useLoginContext } from "../login/auth/LoginContextProvider";
 
 interface QuestionViewProps {
   currentQuestion?: Question;
@@ -11,6 +12,8 @@ export default function QuestionView({
   showQuestion,
 }: QuestionViewProps) {
   const closeQuestion = () => showQuestion(undefined);
+  const { role } = useLoginContext();
+
   if (currentQuestion === undefined) {
     return <></>;
   }
@@ -26,6 +29,11 @@ export default function QuestionView({
           </Modal.Header>
           <Modal.Body>
             <p>{content}</p>
+            {role === "mentor" && (
+              <>
+                <p>TODO MENTOR ONLY ACTION</p>
+              </>
+            )}
           </Modal.Body>
         </>
       )}
