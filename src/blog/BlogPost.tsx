@@ -1,5 +1,5 @@
 import { BlogPostProps } from "./BlogPost.model";
-import BlogPostInfoHeader from './BlogPostInfoHeader';
+import BlogPostInfoHeader from '../common/PostInfoHeader';
 
 export default function BlogPost({
     postID,

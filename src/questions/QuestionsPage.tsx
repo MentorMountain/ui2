@@ -25,15 +25,19 @@ export default function QuestionsPage() {
   const [showQuestionView, setShowQuestionView] = useState<boolean>(false);
   const [questionIDs, setQuestionIDs] = useState<string[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [isGettingQuestions, setIsGettingQuestions] = useState<boolean>(false);
+  const [isGettingQuestions, setIsGettingQuestions] = useState<boolean>(true);
   const showQuestionCreatorModal = () => setShowPostCreator(true);
   const hideQuestionCreatorModal = () => setShowPostCreator(false);
   const showQuestionViewModal = () => setShowQuestionView(true);
-  const hideQuestionViewModal = () => {setShowQuestionView(false); setCurrentQuestion(DEFAULT_QUESTION)};
+  const hideQuestionViewModal = () => {
+    setShowQuestionView(false);
+    setCurrentQuestion(DEFAULT_QUESTION);
+  };
 
   const { jwt, role } = useLoginContext();
 
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(DEFAULT_QUESTION);
+  const [currentQuestion, setCurrentQuestion] =
+    useState<Question>(DEFAULT_QUESTION);
 
   const submitQuestion = ({ title, content }: QuestionInfoProps) => {
     // TODO-JAROD: create an HTML call with onSuccess and onError and execute it
@@ -47,6 +51,7 @@ export default function QuestionsPage() {
     retrieveQuestions().then((_) => console.log("done get of questions!"));
     hideQuestionCreatorModal();
   };
+
   const retrieveQuestionsById = useCallback(
     async (questionIds: string[]) => {
       console.log("now entering the test");
@@ -72,10 +77,10 @@ export default function QuestionsPage() {
   //on page load, get all the question ids, then use them to get all the questions so you can display the question titles, and a clickable button to show more info+responses.
   const retrieveQuestions = useCallback(async () => {
     setIsGettingQuestions(true);
-    getQuestionIDs(jwt).then((responseInfo) => {
+    getQuestionIDs(jwt).then(async (responseInfo) => {
       if (responseInfo.questionIDs) {
         setQuestions([]); //clear the array before pushing the questions
-        const result = retrieveQuestionsById(responseInfo.questionIDs);
+        const result = await retrieveQuestionsById(responseInfo.questionIDs);
 
         // .then(questions:Question[] => {
         //   setQuestions(questions);
@@ -114,16 +119,19 @@ export default function QuestionsPage() {
       <QuestionList
         shouldShowSpinner={isGettingQuestions}
         questionList={questions}
-        showQuestion={(question: Question) => {setCurrentQuestion(question); setShowQuestionView(true)}}
+        showQuestion={(question: Question) => {
+          setCurrentQuestion(question);
+          setShowQuestionView(true);
+        }}
       />
-      {currentQuestion.id !== "" && 
+      {currentQuestion.id !== "" && (
         <QuestionView
           show={showQuestionView}
           onHide={hideQuestionViewModal}
           onShow={showQuestionViewModal}
           currentQuestion={currentQuestion}
         />
-      }
+      )}
     </div>
   );
 }

@@ -7,38 +7,23 @@ interface QuestionResponseListProps {
   questionResponses: QuestionResponse[];
 }
 
-export default function BlogList({
-  questionResponses
+export default function QuestionResponsesList({
+  questionResponses,
 }: QuestionResponseListProps) {
-
   const { role, username } = useLoginContext();
 
   return (
     <div className="response-list">
-
-      {/* <hr className={shouldShowSpinner ? "" : "visually-hidden"}/>
-      <div className="blog-list-spinner-container">
-        <Spinner
-          className={shouldShowSpinner ? "" : "visually-hidden"}
-          as="span"
-          variant="primary"
-          animation="grow"
-          role="status"
-          aria-hidden="true"
+      {questionResponses.map((questionResponse, i) => (
+        <QuestionResponsePost
+          key={questionResponse.id}
+          message={questionResponse.message}
+          authorID={questionResponse.authorID}
+          date={questionResponse.date}
+          id={(i + 1).toString()}
+          questionID={questionResponse.questionID}
         />
-      </div>  */}
-      {
-        questionResponses.map((questionResponse, i) => (
-          <QuestionResponsePost
-            key={questionResponse.id}
-            message={questionResponse.message}
-            authorID={questionResponse.authorID}
-            date={questionResponse.date}
-            id={(i+1).toString()}
-            questionID={questionResponse.questionID}
-          />
-        )) 
-      }
+      ))}
     </div>
   );
 }

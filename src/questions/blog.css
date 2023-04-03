@@ -2,11 +2,6 @@
    Source: https://stackoverflow.com/questions/6721766/google-web-fonts */
 @import url('https://fonts.googleapis.com/css2?family=Scope+One&display=swap');
 
-.blog-container {
-  margin: 0px auto;
-  width: 800px;
-}
-
 article {
   margin: 15px 0px;
 }
@@ -22,13 +17,13 @@ article > header {
   display: flex;
   width: 100%;
   padding: 15px 15px 15px 0px;
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
 }
 
 /* Blog User Profile Picture */
 article > header > *:first-child {
   flex: 0 1 auto;
-  margin: 0px 15px;
+  margin: 0px 10px;
 }
 
 /* Blog Author Name & Post Info */
@@ -53,7 +48,7 @@ article .bullet-point {
 
 article > section {
   padding: 5px 10px;
-  font-family: "Scope One", "Times New Roman", serif;
+  /* font-family: "Scope One", "Times New Roman", serif; */
 }
 
 article > section > h2 {

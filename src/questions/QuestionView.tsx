@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Card, Form, Image, Modal } from "react-bootstrap";
 import { useLoginContext } from "../login/auth/LoginContextProvider";
 import { Question, QuestionResponse } from "./Questions.model";
 import {
@@ -7,6 +7,7 @@ import {
   postResponseToQuestion,
 } from "./service/QuestionsService";
 import QuestionResponsesList from "./QuestionResponsesList";
+import profilePicture from "../common/img/placeholderProfilePicture.png";
 
 interface QuestionViewProps {
   show: boolean;
@@ -20,7 +21,7 @@ const DEFAULT_TEXT = "";
 export default function QuestionView({
   onHide,
   currentQuestion,
-  show
+  show,
 }: QuestionViewProps) {
   const closeQuestion = () => {
     onHide();
@@ -39,7 +40,7 @@ export default function QuestionView({
 
   const retrieveResponsesByQuestionId = useCallback(async () => {
     console.log("currentQuestion:" + currentQuestion);
-    if (currentQuestion != undefined) {
+    if (currentQuestion !== undefined) {
       getResponsesToQuestion(jwt, id!).then((responseInfo) => {
         if (!responseInfo) {
           setQuestionsResponses([]);
@@ -49,7 +50,7 @@ export default function QuestionView({
         }
       });
     }
-  }, [jwt, currentQuestion]);
+  }, [id, jwt, currentQuestion]);
 
   useEffect(() => {
     retrieveResponsesByQuestionId();
@@ -67,11 +68,15 @@ export default function QuestionView({
 
   const submitPost = () => {
     if (checkMessageValidity(message)) {
-      postResponseToQuestion(jwt, currentQuestion.id || "", username, message).then(() => {
+      postResponseToQuestion(
+        jwt,
+        currentQuestion.id || "",
+        username,
+        message
+      ).then(() => {
         retrieveResponsesByQuestionId();
       });
     }
-    
   };
 
   const checkMessageValidity = (message: string): boolean => {
@@ -90,36 +95,49 @@ export default function QuestionView({
       {currentQuestion !== undefined && (
         <>
           <Modal.Header closeButton onHide={closeQuestion}>
-            <Modal.Title>Q: {title}</Modal.Title>
+            <Modal.Title>Question</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>{content}</p>
+            <div className="d-flex justify-content-between align-items-start">
+              <div>
+                <h2>{title}</h2>
+                <p>{content}</p>
+              </div>
+              <div className="text-center">
+                <Image
+                  src={profilePicture}
+                  roundedCircle={true}
+                  width="40px"
+                  height="40px"
+                />
+                <p className="mb-0">{authorID}</p>
+              </div>
+            </div>
+
             {role === "mentor" && (
               <>
-                {/* <p>TODO MENTOR ONLY ACTION</p> */}
-                <Form>
-                  <Form.Group className="mb-3" controlId="blogForm.content">
-                    <Form.Control
-                      as="textarea"
-                      rows={5}
-                      isInvalid={!isMessageValid}
-                      onChange={(e) => updateMessage(e.target.value)}
-                      placeholder="Your response"
-                    />
-                  </Form.Group>
-                </Form>
-                <Modal.Footer className="justify-content">
-        <Button
-          variant="primary"
-          disabled={ !checkMessageValidity(message)}
-          onClick={submitPost}>
-          Submit
-        </Button>
-      </Modal.Footer>
-        <QuestionResponsesList
-          questionResponses={questionResponses}
-          
-        />
+                <Card className="p-3 mt-3">
+                  <Form>
+                    <Form.Group className="mb-3" controlId="questionResponseForm.content">
+                      <Form.Control
+                        as="textarea"
+                        rows={6}
+                        isInvalid={!isMessageValid}
+                        onChange={(e) => updateMessage(e.target.value)}
+                        placeholder="Your response"
+                      />
+                    </Form.Group>
+                  </Form>
+                  <Button
+                    variant="primary"
+                    disabled={!checkMessageValidity(message)}
+                    onClick={submitPost}
+                  >
+                    Submit
+                  </Button>
+                </Card>
+
+                <QuestionResponsesList questionResponses={questionResponses} />
               </>
             )}
           </Modal.Body>
