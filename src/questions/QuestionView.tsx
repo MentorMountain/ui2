@@ -132,6 +132,7 @@ export default function QuestionView({
                       <Form.Control
                         as="textarea"
                         rows={6}
+                        value={message}
                         isInvalid={!isMessageValid}
                         onChange={(e) => updateMessage(e.target.value)}
                         placeholder="Your response"
