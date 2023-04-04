@@ -9,7 +9,7 @@ import { BLOG_PAGE } from "./paths";
 
 export default function NavBar() {
   const navigate = useNavigate();
-  const { username, logout, isInitialized } = useLoginContext();
+  const { username, logout, isInitialized, role } = useLoginContext();
 
   const isLoggedIn = username !== "";
 
@@ -38,9 +38,11 @@ export default function NavBar() {
               <Nav>
                 {isLoggedIn && (
                   <>
-                    <Nav.Link onClick={() => navigate(ABOUT_PAGE)}>
-                      About
-                    </Nav.Link>
+                    {role === "mentor" && (
+                      <Nav.Link onClick={() => navigate(ABOUT_PAGE)}>
+                        About
+                      </Nav.Link>
+                    )}
                     <Nav.Link onClick={() => navigate(ACCOUNT_PAGE)}>
                       Account
                     </Nav.Link>

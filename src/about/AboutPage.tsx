@@ -3,9 +3,12 @@ import { blogHealthEndpoint } from "../blog/service/BlogService";
 import ENV from "../env";
 import { loginHealthEndpoint } from "../login/auth/LoginService";
 import { questionsHealthEndpoint } from "../questions/service/QuestionsService";
-import { Table } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import { ServiceStatus } from "./ServiceStatus";
 import ServiceRow from "./ServiceRow";
+import { useLoginContext } from "../login/auth/LoginContextProvider";
+import { useNavigate } from "react-router-dom";
+import { HOME_PAGE } from "../paths";
 
 function defaultServiceStatus(name: string): ServiceStatus {
   return {
@@ -16,6 +19,9 @@ function defaultServiceStatus(name: string): ServiceStatus {
 }
 
 export default function AboutPage() {
+  const { role } = useLoginContext();
+  const navigate = useNavigate();
+
   const [blogStatus, setBlogStatus] = useState<ServiceStatus>(
     defaultServiceStatus("Blog")
   );
@@ -27,6 +33,10 @@ export default function AboutPage() {
   );
 
   useEffect(() => {
+    if (role !== "mentor") {
+      return;
+    }
+
     const startTime: number = Date.now();
 
     blogHealthEndpoint().then((status) =>
@@ -52,6 +62,21 @@ export default function AboutPage() {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (role !== "mentor") {
+    return (
+      <Container className="text-center">
+        <h2>You must be a mentor</h2>
+        <Button
+          className="mt-3"
+          variant="dark"
+          onClick={() => navigate(HOME_PAGE)}
+        >
+          Go Home
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <>
