@@ -104,9 +104,9 @@ export default function QuestionView({
           </Modal.Header>
           <Modal.Body>
             <div className="d-flex justify-content-between align-items-start">
-              <div>
-                <h2>{title}</h2>
-                <p>{content}</p>
+              <div style={{width: "88%"}}>
+                <h2 className="break-long-text">{title}</h2>
+                <p className="break-long-text">{content}</p>
               </div>
               <div className="text-center">
                 <Image

@@ -43,6 +43,10 @@ article .bullet-point {
   font-size: 11px;
 }
 
+.break-long-text  {
+  word-wrap: break-word;
+}
+
 .questionContent {
   padding: 5px 10px;
   /* font-family: "Scope One", "Times New Roman", serif; */

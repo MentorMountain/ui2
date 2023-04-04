@@ -81,8 +81,8 @@ export default function QuestionList({
                     />
                     <p className="author-name mb-0">{authorID}</p>
                   </div>
-                  <div>
-                    <h3>{title}</h3>
+                  <div style={{width: "93%"}}>
+                    <h3 className="break-long-text">{title}</h3>
                     <p className="post-info mb-0">
                       {new Date(date).toLocaleDateString("en-CA")}{" "}
                       <span className="bullet-point">-</span>&nbsp;
