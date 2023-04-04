@@ -44,11 +44,12 @@ export default function QuestionsPage() {
     console.info(
       `BUTTON PRESSED WITH THE FOLLOWING DATA: title=${title}, content=${content}`
     );
-    postQuestion(jwt, title, content).then((_) =>
+    postQuestion(jwt, title, content).then((_) =>{
       console.log("done posting question!")
-    );
-    getQuestionIDs(jwt).then((_) => console.log("done get of IDs!"));
-    retrieveQuestions().then((_) => console.log("done get of questions!"));
+      getQuestionIDs(jwt).then((_) => console.log("done get of IDs!"));
+      retrieveQuestions().then((_) => console.log("done get of questions!"));
+    });
+    
     hideQuestionCreatorModal();
   };
 
