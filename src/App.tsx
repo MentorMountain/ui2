@@ -76,8 +76,8 @@ function App() {
   const { isInitialized } = useLoginContext();
 
   return (
-    <div className="App mt-3">
-      <Container>
+    <div className="App mt-1">
+      <Container className="p-4">
         {isInitialized ? (
           <Routes>
             {pages.map(({ name, path, isProtected, component }) => {

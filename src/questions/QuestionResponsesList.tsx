@@ -10,8 +10,6 @@ interface QuestionResponseListProps {
 export default function QuestionResponsesList({
   questionResponses,
 }: QuestionResponseListProps) {
-  const { role, username } = useLoginContext();
-
   return (
     <div className="response-list">
       {questionResponses.map((questionResponse, i) => (

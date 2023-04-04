@@ -29,7 +29,6 @@ export default function QuestionView({
   const { role } = useLoginContext();
 
   const [message, setMessage] = useState<string>(DEFAULT_TEXT);
-  const [isMessageValid, setIsMessageValid] = useState<boolean>(true);
   const [questionResponses, setQuestionsResponses] = useState<
     QuestionResponse[]
   >([]);
@@ -69,7 +68,6 @@ export default function QuestionView({
 
   const updateMessage = (text: string) => {
     setMessage(text);
-    setIsMessageValid(checkMessageValidity(text));
   };
 
   const submitPost = () => {
@@ -123,22 +121,22 @@ export default function QuestionView({
 
             {role === "mentor" && (
               <>
-                <Card className="p-3 mt-3">
-                  <Form>
-                    <Form.Group
-                      className="mb-3"
-                      controlId="questionResponseForm.content"
-                    >
-                      <Form.Control
-                        as="textarea"
-                        rows={6}
-                        value={message}
-                        isInvalid={!isMessageValid}
-                        onChange={(e) => updateMessage(e.target.value)}
-                        placeholder="Your response"
-                      />
-                    </Form.Group>
-                  </Form>
+                <hr />
+                <Form>
+                  <Form.Group
+                    className="mb-3"
+                    controlId="questionResponseForm.content"
+                  >
+                    <Form.Control
+                      as="textarea"
+                      rows={6}
+                      value={message}
+                      onChange={(e) => updateMessage(e.target.value)}
+                      placeholder="Your response"
+                    />
+                  </Form.Group>
+                </Form>
+                <div className="d-flex justify-content-end">
                   <Button
                     variant="primary"
                     disabled={!checkMessageValidity(message)}
@@ -146,11 +144,12 @@ export default function QuestionView({
                   >
                     Submit
                   </Button>
-                </Card>
+                </div>
               </>
             )}
             <QuestionResponsesList questionResponses={questionResponses} />
           </Modal.Body>
+          <Modal.Footer></Modal.Footer>
         </>
       )}
     </Modal>

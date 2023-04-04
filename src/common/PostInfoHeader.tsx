@@ -1,8 +1,8 @@
-import Image from 'react-bootstrap/Image'
+import Image from "react-bootstrap/Image";
 
-import profilePicture from '../common/img/placeholderProfilePicture.png';
-import { Badge } from 'react-bootstrap';
-import { useLoginContext } from '../login/auth/LoginContextProvider';
+import profilePicture from "../common/img/placeholderProfilePicture.png";
+import { Badge } from "react-bootstrap";
+import { useLoginContext } from "../login/auth/LoginContextProvider";
 
 interface BlogPostHeaderProps {
   postID?: string;
@@ -13,8 +13,20 @@ interface BlogPostHeaderProps {
 
 function getDateString(date: number): string {
   const dateObject: Date = new Date(date);
-  const monthStrings: string[] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthStrings: string[] = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const day: number = dateObject.getDate();
   const month: string = monthStrings[dateObject.getUTCMonth()];
   const year: number = dateObject.getFullYear();
@@ -27,7 +39,7 @@ function getTimeString(date: number): string {
   // Create string of format `hh:mm p.m.`
   timeString = timeString.replace(/:[0-9]{2} /, " ");
   // Create string of format `hh:mm PM`
-  timeString = timeString.replaceAll('.', "").toUpperCase();
+  timeString = timeString.replaceAll(".", "").toUpperCase();
   return timeString;
 }
 
@@ -42,15 +54,20 @@ function getReadTimeString(text: string): string {
 
   const numOfWordsSource1Calc: number = text.trim().split(/\s+/).length;
   const numOfWordsSource2Calc: number = text.trim().length / 4.7;
-  const readTimeInMinutes: number = ((numOfWordsSource1Calc / 200) + (numOfWordsSource2Calc / 200)) / 2;
+  const readTimeInMinutes: number =
+    (numOfWordsSource1Calc / 200 + numOfWordsSource2Calc / 200) / 2;
 
   // If read time is 1+ minutes, display time in integer minutes
   if (readTimeInMinutes >= 1) {
     const roundedReadTime: number = Math.round(readTimeInMinutes);
     return `${roundedReadTime} min read`;
-  } else { // Handle read time in seconds
+  } else {
+    // Handle read time in seconds
     // Math.max used to ensure read time is never below 1 second
-    const readTimeInSeconds: number = Math.max(1, Math.round(readTimeInMinutes * 60));
+    const readTimeInSeconds: number = Math.max(
+      1,
+      Math.round(readTimeInMinutes * 60)
+    );
     return `${readTimeInSeconds} sec read`;
   }
 }
@@ -65,10 +82,10 @@ function getPostIDString(postID: string | undefined): string {
 }
 
 export default function BlogPostInfoHeader({
-    postID,
-    authorID,
-    date,
-    content,
+  postID,
+  authorID,
+  date,
+  content,
 }: BlogPostHeaderProps) {
   const { username } = useLoginContext();
   const postMadeByCurrentUser: boolean = username === authorID;
@@ -76,19 +93,27 @@ export default function BlogPostInfoHeader({
   const timeText: string = getTimeString(date);
   const readTimeText: string = getReadTimeString(content);
   const postIDText: string = getPostIDString(postID);
-  const isLocalCachedPost: boolean = (postID!.split('-')[0]) === "LC";
+  const isLocalCachedPost: boolean = postID!.split("-")[0] === "LC";
 
   return (
     <header>
-      <Image src={profilePicture}
-             roundedCircle={true}
-             width="50px"
-             height="50px"/>
+      <Image
+        src={profilePicture}
+        roundedCircle={true}
+        width="50px"
+        height="50px"
+      />
       <div>
         <p className="author-name">
           {authorID}
-          <span className={postMadeByCurrentUser ? "author-badge-parent" : "visually-hidden"}>
-            <Badge pill bg="primary">✨ It's you! ✨</Badge>
+          <span
+            className={
+              postMadeByCurrentUser ? "author-badge-parent" : "visually-hidden"
+            }
+          >
+            <Badge pill bg="secondary" className="-1">
+              You
+            </Badge>
           </span>
         </p>
         <p className="post-info">
@@ -98,8 +123,14 @@ export default function BlogPostInfoHeader({
           <span className={isLocalCachedPost ? "visually-hidden" : ""}>
             {postIDText}
           </span>
-          <span className={isLocalCachedPost ? "cache-badge-parent" : "visually-hidden"}>
-            <Badge pill bg="secondary">Locally cached</Badge>
+          <span
+            className={
+              isLocalCachedPost ? "cache-badge-parent" : "visually-hidden"
+            }
+          >
+            <Badge pill bg="secondary">
+              Locally cached
+            </Badge>
           </span>
         </p>
       </div>
