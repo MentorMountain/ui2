@@ -1,7 +1,5 @@
-import { Spinner } from "react-bootstrap";
-import { useLoginContext } from "../login/auth/LoginContextProvider";
-import { QuestionResponse } from "./Questions.model";
 import QuestionResponsePost from "./QuestionResponsePost";
+import { QuestionResponse } from "./Questions.model";
 
 interface QuestionResponseListProps {
   questionResponses: QuestionResponse[];

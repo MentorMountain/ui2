@@ -1,5 +1,5 @@
-import { QuestionResponse } from "./Questions.model";
 import BlogPostInfoHeader from "../common/PostInfoHeader";
+import { QuestionResponse } from "./Questions.model";
 
 export default function QuestionResponsePost({
   id,
